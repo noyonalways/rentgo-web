@@ -15,9 +15,14 @@
     "lucide",
     "noyonalways",
     "reduxjs",
+    "Roboto",
+    "signin",
+    "signup",
+    "singup",
     "smastrom",
     "sonner",
     "Swiper",
-    "tailwindcss"
+    "tailwindcss",
+    "tseslint"
   ]
 }

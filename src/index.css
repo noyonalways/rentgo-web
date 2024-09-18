@@ -77,4 +77,8 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  p {
+    @apply text-[#D6D6D6];
+  }
 }

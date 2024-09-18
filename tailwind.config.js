@@ -4,6 +4,11 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        outfit: ["Outfit", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
+        Roboto: ["Roboto", "system-ui"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

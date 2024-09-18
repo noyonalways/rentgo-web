@@ -14,7 +14,7 @@ const Navbar: React.FC<IProps> = () => {
             <img src={logo} alt="logo" />
             <span className="text-2xl font-semibold">RentGo</span>
           </Link>
-          <ul className="absolute bg-white w-full flex flex-col left-0 top-20 lg:w-auto lg:static lg:flex-row lg:bg-transparent lg:items-center lg:space-x-4">
+          <ul className=" hidden absolute bg-white w-full  flex-col left-0 top-20 lg:w-auto lg:static lg:flex-row lg:bg-transparent lg:items-center lg:space-x-4">
             <li>
               <Link
                 className="hover:bg-primary py-4 px-4 block lg:hover:bg-transparent lg:hover:text-primary lg:py-0 lg:inline-block lg:px-0"

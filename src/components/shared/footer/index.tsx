@@ -114,7 +114,7 @@ const Footer: React.FC<IProps> = () => {
             <small className="text-gray-400">
               &copy; {new Date().getFullYear()} RentGo. All rights reserved.
             </small>
-            <ul className="text-xs flex flex-col lg:flex-row space-y-4 lg:space-y-0 items-center lg:space-x-6 mb-8 lg:mb-0">
+            <ul className="text-xs flex flex-row lg:space-y-0 items-center space-x-6 mb-8 lg:mb-0">
               <li>
                 <a className="text-gray-400 hover:underline" href="#">
                   Terms

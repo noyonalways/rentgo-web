@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  ChevronRight,
   Facebook,
   Instagram,
   Linkedin,
-  MoveRight,
   Twitter,
   Youtube,
 } from "lucide-react";
@@ -14,9 +14,9 @@ interface IProps {}
 
 const Footer: React.FC<IProps> = () => {
   return (
-    <footer className="bg-[#272727] dark:bg-primary/10 lg:dark:bg-transparent lg:bg-transparent">
+    <footer className="bg-[#272727] dark:bg-primary/5 lg:dark:bg-transparent lg:bg-transparent">
       <div className="container">
-        <div className="lg:bg-[#272727] lg:dark:bg-primary/10 pt-8 px-1 pb-4 lg:pt-10 lg:px-10 lg:pb-6 rounded-lg">
+        <div className="lg:bg-[#272727] lg:dark:bg-primary/5 pt-8 px-1 pb-4 lg:pt-10 lg:px-10 lg:pb-6 rounded-lg">
           <div className="grid lg:grid-cols-4 gap-8">
             <div className="space-y-4">
               <Link to="/" className="flex items-center space-x-1">
@@ -104,7 +104,7 @@ const Footer: React.FC<IProps> = () => {
                   size={"icon"}
                   className="absolute right-[6px] top-[6px]"
                 >
-                  <MoveRight />
+                  <ChevronRight />
                 </Button>
               </form>
             </div>

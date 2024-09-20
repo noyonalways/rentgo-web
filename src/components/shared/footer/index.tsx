@@ -25,7 +25,7 @@ const Footer: React.FC<IProps> = () => {
                   RentGo
                 </span>
               </Link>
-              <p className="text-sm">
+              <p className="text-sm text-[#D6D6D6]">
                 Rent high-quality cars, for your fun vacation and road trip.
               </p>
             </div>

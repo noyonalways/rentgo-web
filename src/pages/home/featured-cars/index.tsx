@@ -25,6 +25,7 @@ const FeaturedCars: React.FC<IProps> = () => {
             }),
           ]}
           opts={{
+            loop: true,
             align: "start",
           }}
         >

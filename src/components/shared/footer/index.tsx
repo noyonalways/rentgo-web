@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  ChevronRight,
   Facebook,
   Instagram,
   Linkedin,
-  MoveRight,
   Twitter,
   Youtube,
 } from "lucide-react";
@@ -14,9 +14,9 @@ interface IProps {}
 
 const Footer: React.FC<IProps> = () => {
   return (
-    <footer>
+    <footer className="bg-[#272727] dark:bg-primary/5 lg:dark:bg-transparent lg:bg-transparent">
       <div className="container">
-        <div className="bg-[#272727] dark:bg-primary/10 pt-10 px-10 pb-6 rounded-lg">
+        <div className="lg:bg-[#272727] lg:dark:bg-primary/5 pt-8 px-1 pb-4 lg:pt-10 lg:px-10 lg:pb-6 rounded-lg">
           <div className="grid lg:grid-cols-4 gap-8">
             <div className="space-y-4">
               <Link to="/" className="flex items-center space-x-1">
@@ -92,7 +92,7 @@ const Footer: React.FC<IProps> = () => {
             {/* news latter */}
             <div className="space-y-4">
               <h6 className="font-semibold text-lg text-white">
-                Subscribe to the <br /> newslatter
+                Subscribe to the <br className="hidden lg:block" /> newslatter
               </h6>
               <form className="relative">
                 <Input
@@ -102,19 +102,19 @@ const Footer: React.FC<IProps> = () => {
                 <Button
                   type="submit"
                   size={"icon"}
-                  className="absolute right-2 top-[6px]"
+                  className="absolute right-[6px] top-[6px]"
                 >
-                  <MoveRight />
+                  <ChevronRight />
                 </Button>
               </form>
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-t border-t-gray-600 py-6 mt-16">
+          <div className="flex flex-col-reverse lg:flex-row items-center justify-between border-t border-t-gray-600/40 dark:border-t-gray-600/20 py-6 mt-6 lg:mt-16">
             <small className="text-gray-400">
               &copy; {new Date().getFullYear()} RentGo. All rights reserved.
             </small>
-            <ul className="text-xs flex items-center space-x-6">
+            <ul className="text-xs flex flex-row lg:space-y-0 items-center space-x-6 mb-8 lg:mb-0">
               <li>
                 <a className="text-gray-400 hover:underline" href="#">
                   Terms
@@ -138,29 +138,44 @@ const Footer: React.FC<IProps> = () => {
             </ul>
 
             {/* social links */}
-            <ul className="flex items-center space-x-6">
+            <ul className="flex items-center space-x-6 mb-8 lg:mb-0">
               <li>
-                <a className="text-gray-400 hover:underline" href="#">
+                <a
+                  className="text-gray-400 hover:underline hover:text-primary"
+                  href="#"
+                >
                   <Youtube size={20} />
                 </a>
               </li>
               <li>
-                <a className="text-gray-400 hover:underline" href="#">
+                <a
+                  className="text-gray-400 hover:underline hover:text-primary"
+                  href="#"
+                >
                   <Facebook size={20} />
                 </a>
               </li>
               <li>
-                <a className="text-gray-400 hover:underline" href="#">
+                <a
+                  className="text-gray-400 hover:underline hover:text-primary"
+                  href="#"
+                >
                   <Twitter size={20} />
                 </a>
               </li>
               <li>
-                <a className="text-gray-400 hover:underline" href="#">
+                <a
+                  className="text-gray-400 hover:underline hover:text-primary"
+                  href="#"
+                >
                   <Instagram size={20} />
                 </a>
               </li>
               <li>
-                <a className="text-gray-400 hover:underline" href="#">
+                <a
+                  className="text-gray-400 hover:underline hover:text-primary"
+                  href="#"
+                >
                   <Linkedin size={20} />
                 </a>
               </li>

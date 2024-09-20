@@ -1,5 +1,5 @@
 import { MainLayout } from "@/layouts";
-import { Home, SignIn, SignUp } from "@/pages";
+import { Home, PaymentSuccess, SignIn, SignUp } from "@/pages";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -18,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "signin",
         element: <SignIn />,
+      },
+      {
+        path: "/booking/payment/success",
+        element: <PaymentSuccess />,
       },
     ],
   },

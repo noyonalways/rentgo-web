@@ -11,8 +11,8 @@ const Navbar: React.FC<IProps> = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="z-50 sticky top-0 bg-background">
-      <nav className="container sticky top-0 py-3 lg:py-4">
+    <header className="z-50 sticky top-0 bg-background border-b">
+      <nav className="container sticky top-0 py-3 lg:py-3">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-1">
             <img src={logo} alt="logo" />

@@ -6,6 +6,7 @@ import {
   PaymentSuccess,
   SignIn,
   SignUp,
+  UserProfile,
 } from "@/pages";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/booking/payment/cancel",
         element: <PaymentCancel />,
+      },
+      {
+        path: "me",
+        element: <UserProfile />,
       },
     ],
   },

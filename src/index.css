@@ -79,6 +79,6 @@
   }
 
   p {
-    @apply text-[#D6D6D6];
+    @apply text-muted-foreground;
   }
 }

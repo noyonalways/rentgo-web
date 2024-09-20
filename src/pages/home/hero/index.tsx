@@ -34,10 +34,10 @@ const Hero: React.FC<IProps> = () => {
   };
 
   return (
-    <section className="pb-36 pt-10 lg:pt-12">
+    <section className="pb-20 lg:pb-36 pt-10 lg:pt-12">
       <div className="container">
         <div className="flex flex-col items-center space-y-6 mb-8 lg:mb-0">
-          <h1 className="text-3xl lg:text-5xl font-bold text-center w-full lg:max-w-xl mx-auto leading-tight">
+          <h1 className="text-3xl lg:text-5xl font-bold text-center w-full lg:max-w-xl mx-auto !leading-tight lg:!leading-snug">
             Find, book, and rental car in Easy Steps
           </h1>
           <Button size={"lg"}>Book Now</Button>
@@ -164,7 +164,8 @@ const Hero: React.FC<IProps> = () => {
                 type="submit"
                 className="size-10 w-full lg:w-10"
               >
-                <Search size={20} />
+                <Search size={20} />{" "}
+                <span className="lg:hidden ml-2">Search</span>
               </Button>
             </FormItem>
           </form>

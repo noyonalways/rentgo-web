@@ -35,14 +35,12 @@ const Overview: React.FC<IProps> = () => {
     <>
       <DashboardSectionTitle title="Overview" />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="grid grid-cols-2 basis-[35%] gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {userOverview.map((item, index) => (
             <OverviewCard key={index} {...item} />
           ))}
         </div>
-        <div>
-          <OverviewBarChart />
-        </div>
+        <OverviewBarChart />
       </div>
       <div className="mt-6">
         <h2 className="text-2xl font-semibold mb-6">Latest Bookings</h2>

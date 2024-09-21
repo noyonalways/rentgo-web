@@ -21,7 +21,7 @@ const ProfileAvatar: React.FC<IProps> = ({ align, size }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar
-          className={`bg-background ring-4 ring-primary ${
+          className={`bg-background ring-2 ring-primary ${
             size ? size : "size-12"
           }`}
         >

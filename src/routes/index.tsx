@@ -1,8 +1,13 @@
 import { DashboardLayout, MainLayout } from "@/layouts";
 import {
+  AdminOverview,
   Home,
+  ManageAllBookings,
+  ManageCars,
   ManagePayments,
+  ManageReturnCars,
   ManageUserBookings,
+  ManageUsers,
   PaymentCancel,
   PaymentFailed,
   PaymentSuccess,
@@ -57,12 +62,38 @@ const router = createBrowserRouter([
         element: <UserOverview />,
       },
       {
-        path: "booking-management",
+        path: "manage-bookings",
         element: <ManageUserBookings />,
       },
       {
-        path: "payment-management",
+        path: "manage-payments",
         element: <ManagePayments />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "overview",
+        element: <AdminOverview />,
+      },
+      {
+        path: "manage-cars",
+        element: <ManageCars />,
+      },
+      {
+        path: "manage-bookings",
+        element: <ManageAllBookings />,
+      },
+      {
+        path: "manage-return-cars",
+        element: <ManageReturnCars />,
+      },
+      {
+        path: "manage-users",
+        element: <ManageUsers />,
       },
     ],
   },

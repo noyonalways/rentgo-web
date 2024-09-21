@@ -2,14 +2,18 @@ import { ModeToggle } from "@/components/mode-toggle";
 import ProfileAvatar from "@/components/profile-avatar";
 import { Button } from "@/components/ui/button";
 import {
+  Car,
+  CarFront,
   CreditCard,
   History,
   Home,
   LayoutDashboard,
   Menu,
+  UsersRound,
   X,
 } from "lucide-react";
 import { useState } from "react";
+import { AiOutlineBook } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/car.svg";
 
@@ -17,6 +21,113 @@ interface IProps {}
 
 const Sidebar: React.FC<IProps> = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const role: "user" | "admin" = "admin";
+
+  const userLinks = (
+    <>
+      <li>
+        <Link className="block w-full" to={"/user/overview"}>
+          <Button
+            variant={"secondary"}
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <LayoutDashboard size={16} />
+            <span>Overview</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link className="block w-full" to={"/user/manage-bookings"}>
+          <Button
+            variant="secondary"
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <History size={16} />
+            <span>Booking Management</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link className="block w-full" to={"/user/manage-payments"}>
+          <Button
+            variant="secondary"
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <CreditCard size={16} />
+            <span>Payment Management</span>
+          </Button>
+        </Link>
+      </li>
+    </>
+  );
+
+  const adminLinks = (
+    <>
+      <li>
+        <Link className="block w-full" to={"/admin/overview"}>
+          <Button
+            variant={"secondary"}
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <LayoutDashboard size={16} />
+            <span>Overview</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link className="block w-full" to={"/admin/manage-cars"}>
+          <Button
+            variant="secondary"
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <Car size={16} />
+            <span>Manage Cars</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link className="block w-full" to={"/admin/manage-bookings"}>
+          <Button
+            variant="secondary"
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <AiOutlineBook size={16} />
+            <span>Manage Bookings</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link className="block w-full" to={"/admin/manage-return-cars"}>
+          <Button
+            variant="secondary"
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <CarFront size={16} />
+            <span>Manage Return Cars</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link className="block w-full" to={"/admin/manage-users"}>
+          <Button
+            variant="secondary"
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <UsersRound size={16} />
+            <span>User Management</span>
+          </Button>
+        </Link>
+      </li>
+    </>
+  );
 
   return (
     <div className="lg:basis-[20%] basis-full lg:h-screen bg-background border-b lg:border-b-0 lg:border-r border-r-0 fixed top-0 lg:sticky w-full z-10">
@@ -60,42 +171,7 @@ const Sidebar: React.FC<IProps> = () => {
               </Button>
             </Link>
           </li>
-          <li>
-            <Link className="block w-full" to={"/user/overview"}>
-              <Button
-                variant={"secondary"}
-                size={"lg"}
-                className="flex items-center justify-start space-x-2 w-full"
-              >
-                <LayoutDashboard size={16} />
-                <span>Overview</span>
-              </Button>
-            </Link>
-          </li>
-          <li>
-            <Link className="block w-full" to={"/user/booking-management"}>
-              <Button
-                variant="secondary"
-                size={"lg"}
-                className="flex items-center justify-start space-x-2 w-full"
-              >
-                <History size={16} />
-                <span>Booking Management</span>
-              </Button>
-            </Link>
-          </li>
-          <li>
-            <Link className="block w-full" to={"/user/payment-management"}>
-              <Button
-                variant="secondary"
-                size={"lg"}
-                className="flex items-center justify-start space-x-2 w-full"
-              >
-                <CreditCard size={16} />
-                <span>Payment Management</span>
-              </Button>
-            </Link>
-          </li>
+          {role === "admin" ? adminLinks : userLinks}
         </ul>
       </nav>
     </div>

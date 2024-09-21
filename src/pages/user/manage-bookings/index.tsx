@@ -1,7 +1,13 @@
+import DashboardSectionTitle from "@/components/dashboard-section-title";
+
 interface IProps {}
 
 const ManageBookings: React.FC<IProps> = () => {
-  return <div>This is ManageBookings</div>;
+  return (
+    <div>
+      <DashboardSectionTitle title="Manage Bookings" />
+    </div>
+  );
 };
 
 export default ManageBookings;

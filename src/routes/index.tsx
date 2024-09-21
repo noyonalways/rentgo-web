@@ -1,11 +1,14 @@
-import { MainLayout } from "@/layouts";
+import { DashboardLayout, MainLayout } from "@/layouts";
 import {
   Home,
+  ManagePayments,
+  ManageUserBookings,
   PaymentCancel,
   PaymentFailed,
   PaymentSuccess,
   SignIn,
   SignUp,
+  UserOverview,
   UserProfile,
 } from "@/pages";
 import { createBrowserRouter } from "react-router-dom";
@@ -42,6 +45,24 @@ const router = createBrowserRouter([
       {
         path: "me",
         element: <UserProfile />,
+      },
+    ],
+  },
+  {
+    path: "/user",
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "overview",
+        element: <UserOverview />,
+      },
+      {
+        path: "booking-management",
+        element: <ManageUserBookings />,
+      },
+      {
+        path: "payment-management",
+        element: <ManagePayments />,
       },
     ],
   },

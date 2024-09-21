@@ -19,7 +19,7 @@ const Navbar: React.FC<IProps> = () => {
             <span className="text-2xl font-semibold">RentGo</span>
           </Link>
           <ul
-            className={`z-10 flex absolute bg-background w-[80%] flex-col top-0 lg:w-auto lg:static lg:flex-row lg:bg-transparent lg:items-center lg:space-x-4 h-screen lg:h-auto ${
+            className={`z-10 flex absolute bg-background w-[80%] flex-col top-0 lg:w-auto lg:static lg:flex-row lg:bg-transparent lg:items-center lg:space-x-8 h-screen lg:h-auto ${
               isMenuOpen ? "left-0" : "-left-full"
             } transition-all duration-300`}
           >
@@ -66,7 +66,7 @@ const Navbar: React.FC<IProps> = () => {
             <li>
               <Link
                 className="hover:bg-primary py-4 px-4 block lg:hover:bg-transparent lg:hover:text-primary lg:py-0 lg:inline-block lg:px-0"
-                to="/"
+                to="/user/overview"
               >
                 Dashboard
               </Link>

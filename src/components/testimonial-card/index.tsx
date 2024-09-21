@@ -22,11 +22,11 @@ const TestimonialCard: React.FC<IProps> = () => {
       </p>
       <div className="flex justify-start">
         <div className="inline-flex items-center space-x-4 rounded-tr-xl">
-          <Avatar className="size-24 bg-background rounded-none rounded-tr-xl">
+          <Avatar className="size-24 bg-background rounded-none rounded-tr-xl p-4">
             <AvatarImage
               src="https://i.ibb.co.com/c64q254/noyon-logo-dark.png"
               alt="Customer avatar"
-              className="p-4 w-full"
+              className=" w-full"
             />
             <AvatarFallback className="bg-muted dark:bg-primary/15">
               CI

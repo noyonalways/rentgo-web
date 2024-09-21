@@ -1,5 +1,6 @@
 import { User } from "lucide-react";
 import { TbManualGearbox } from "react-icons/tb";
+import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 
 interface IProps {}
@@ -32,9 +33,11 @@ const CarCard: React.FC<IProps> = () => {
         </div>
       </div>
       <div className="absolute left-0 top-0 w-full bg-primary/90 h-full rounded-xl flex items-center justify-center opacity-0 hover:opacity-100 duration-200 transition-all cursor-pointer">
-        <Button className="border dark:hover:border-primary border-white bg-transparent hover:bg-background hover:text-primary active:scale-95 duration-200">
-          View Details
-        </Button>
+        <Link to={`/cars/random-id`}>
+          <Button className="border dark:hover:border-primary border-white bg-transparent hover:bg-background hover:text-primary active:scale-95 duration-200">
+            View Details
+          </Button>
+        </Link>
       </div>
     </div>
   );

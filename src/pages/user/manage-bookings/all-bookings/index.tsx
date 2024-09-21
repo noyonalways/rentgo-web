@@ -5,8 +5,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import BookingCard from "../../manage-bookings/all-bookings/booking-card";
-import BookingRow from "../../manage-bookings/all-bookings/booking-row";
+import BookingCard from "./booking-card";
+import BookingRow from "./booking-row";
 
 interface Booking {
   carName: string;
@@ -18,7 +18,7 @@ interface Booking {
 
 interface IProps {}
 
-const LatestBookings: React.FC<IProps> = () => {
+const AllBookings: React.FC<IProps> = () => {
   const bookings: Booking[] = [
     {
       carName: "Range Rover",
@@ -109,4 +109,4 @@ const LatestBookings: React.FC<IProps> = () => {
   );
 };
 
-export default LatestBookings;
+export default AllBookings;

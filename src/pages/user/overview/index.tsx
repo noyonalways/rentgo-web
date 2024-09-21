@@ -3,7 +3,7 @@ import OverviewCard from "@/components/overview-card";
 import { CircleCheck, CircleEllipsis, CircleX } from "lucide-react";
 import { AiOutlineBook } from "react-icons/ai";
 import LatestBookings from "./latest-bookings";
-import OverviewPieChart from "./overview-piechart";
+import OverviewBarChart from "./overview-barchart";
 
 interface IProps {}
 
@@ -34,14 +34,14 @@ const Overview: React.FC<IProps> = () => {
   return (
     <>
       <DashboardSectionTitle title="Overview" />
-      <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="grid grid-cols-2 basis-[35%] gap-4">
           {userOverview.map((item, index) => (
             <OverviewCard key={index} {...item} />
           ))}
         </div>
-        <div className="basis-[35%]">
-          <OverviewPieChart />
+        <div>
+          <OverviewBarChart />
         </div>
       </div>
       <div className="mt-6">

@@ -50,7 +50,7 @@ const Navbar: React.FC<IProps> = () => {
             <li>
               <Link
                 className="hover:bg-primary py-4 px-4 block lg:hover:bg-transparent lg:hover:text-primary lg:py-0 lg:inline-block lg:px-0"
-                to="/"
+                to="/cars"
               >
                 Cars
               </Link>
@@ -58,7 +58,7 @@ const Navbar: React.FC<IProps> = () => {
             <li>
               <Link
                 className="hover:bg-primary py-4 px-4 block lg:hover:bg-transparent lg:hover:text-primary lg:py-0 lg:inline-block lg:px-0"
-                to="/"
+                to="/about-us"
               >
                 About Us
               </Link>

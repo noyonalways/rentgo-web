@@ -24,7 +24,7 @@ const CarCard: React.FC<IProps> = () => {
           </div>
           <div className="flex space-x-2 items-center">
             <TbManualGearbox className="text-primary" size={24} />
-            <p>4</p>
+            <p>Manual</p>
           </div>
         </div>
         <div className="font-medium">

@@ -1,5 +1,6 @@
 import FeaturedCars from "./featured-cars";
 import Hero from "./hero";
+import PopularBrands from "./popular-brands";
 import Testimonial from "./testimonial";
 import WhyChooseUs from "./why-choose-us";
 
@@ -10,6 +11,7 @@ const Home: React.FC<IProps> = () => {
     <>
       <Hero />
       <WhyChooseUs />
+      <PopularBrands />
       <FeaturedCars />
       <Testimonial />
     </>

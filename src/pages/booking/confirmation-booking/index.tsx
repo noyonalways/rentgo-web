@@ -162,7 +162,7 @@ const ConfirmationBooking: React.FC<IProps> = () => {
                   <PiNotification size={20} className="text-primary" />
                   <span>Status</span>
                 </div>
-                <p>SUV</p>
+                <p>Available</p>
               </div>
 
               <div>

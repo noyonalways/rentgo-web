@@ -1,5 +1,13 @@
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ChevronRight,
   Facebook,
@@ -8,15 +16,36 @@ import {
   Twitter,
   Youtube,
 } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { z } from "zod";
 import logo from "../../../assets/car.svg";
+
 interface IProps {}
 
+const newsLatterSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .email("Invalid email"),
+});
+
 const Footer: React.FC<IProps> = () => {
+  const form = useForm<z.infer<typeof newsLatterSchema>>({
+    resolver: zodResolver(newsLatterSchema),
+  });
+
+  const onSubmit = (data: z.infer<typeof newsLatterSchema>) => {
+    console.log("data", data); // Handle the form submission (e.g., send to an API)
+
+    // Reset the form after submission
+    form.reset();
+  };
   return (
     <footer className="bg-[#272727] dark:bg-primary/5 lg:dark:bg-transparent lg:bg-transparent">
       <div className="container">
-        <div className="lg:bg-[#272727] lg:dark:bg-primary/5 pt-8 px-1 pb-4 lg:pt-10 lg:px-10 lg:pb-6 rounded-lg">
+        <div className="lg:bg-[#272727] lg:dark:bg-primary/5 pt-8 px-1 pb-4 lg:pt-10 lg:px-10 lg:pb-6 rounded-lg rounded-b-none">
           <div className="grid lg:grid-cols-4 gap-8">
             <div className="space-y-4">
               <Link to="/" className="flex items-center space-x-1">
@@ -94,19 +123,37 @@ const Footer: React.FC<IProps> = () => {
               <h6 className="font-semibold text-lg text-white">
                 Subscribe to the <br className="hidden lg:block" /> newslatter
               </h6>
-              <form className="relative">
-                <Input
-                  placeholder="Email"
-                  className="bg-white dark:bg-white/10 h-12"
-                />
-                <Button
-                  type="submit"
-                  size={"icon"}
-                  className="absolute right-[6px] top-[6px]"
+              <Form {...form}>
+                <form
+                  className="relative"
+                  onSubmit={form.handleSubmit(onSubmit)}
                 >
-                  <ChevronRight />
-                </Button>
-              </form>
+                  <FormField
+                    name="email"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            className="px-5 py-6 bg-background"
+                            placeholder="Email"
+                            {...field}
+                            value={field.value ?? ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button
+                    className="absolute top-[7px] right-[7px]"
+                    size="icon"
+                  >
+                    <ChevronRight size={20} />
+                  </Button>
+                </form>
+              </Form>
             </div>
           </div>
 

@@ -13,6 +13,7 @@ import {
   ManageReturnCars,
   ManageUserBookings,
   ManageUsers,
+  NotFound,
   PaymentCancel,
   PaymentFailed,
   PaymentSuccess,
@@ -121,6 +122,10 @@ const router = createBrowserRouter([
         element: <ManageUsers />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

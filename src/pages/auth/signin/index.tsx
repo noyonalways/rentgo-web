@@ -28,7 +28,7 @@ const SignIn: React.FC<IProps> = () => {
   };
 
   return (
-    <section className="pt-2 pb-20 lg:pt-10">
+    <section className="pt-2 pb-24 lg:pt-10">
       <div className="container">
         <div className="text-center space-y-2 mb-16">
           <h3 className="text-primary font-semibold tracking-[.15rem]">

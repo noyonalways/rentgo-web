@@ -1,7 +1,9 @@
 import { DashboardLayout, MainLayout } from "@/layouts";
 import {
+  AboutUs,
   AdminOverview,
   CarDetails,
+  Cars,
   ConfirmationBooking,
   CreateBooking,
   Home,
@@ -11,6 +13,7 @@ import {
   ManageReturnCars,
   ManageUserBookings,
   ManageUsers,
+  NotFound,
   PaymentCancel,
   PaymentFailed,
   PaymentSuccess,
@@ -55,6 +58,10 @@ const router = createBrowserRouter([
         element: <UserProfile />,
       },
       {
+        path: "/cars",
+        element: <Cars />,
+      },
+      {
         path: "/cars/:id",
         element: <CarDetails />,
       },
@@ -65,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/cars/:id/confirm-booking",
         element: <ConfirmationBooking />,
+      },
+      {
+        path: "about-us",
+        element: <AboutUs />,
       },
     ],
   },
@@ -111,6 +122,10 @@ const router = createBrowserRouter([
         element: <ManageUsers />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

@@ -17,6 +17,7 @@ import { searchCarFormSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDown, Search } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 
 interface IProps {}
@@ -40,7 +41,9 @@ const Hero: React.FC<IProps> = () => {
           <h1 className="text-3xl lg:text-5xl font-bold text-center w-full lg:max-w-xl mx-auto !leading-tight lg:!leading-snug">
             Find, book, and rental car in Easy Steps
           </h1>
-          <Button size={"lg"}>Book Now</Button>
+          <Link to={"/cars"}>
+            <Button size={"lg"}>Book Now</Button>
+          </Link>
         </div>
       </div>
       <figure>
@@ -49,7 +52,7 @@ const Hero: React.FC<IProps> = () => {
           alt="rentgo-car-banner-image"
         />
       </figure>
-      <div className="lg:absolute lg:-translate-x-1/2 lg:left-[50%] w-full lg:max-w-5xl mx-auto px-4 py-4 lg:py-14 lg:px-8 lg:-mt-20 rounded-md bg-background lg:shadow-md">
+      <div className="lg:absolute lg:-translate-x-1/2 lg:left-[50%] w-full lg:max-w-5xl mx-auto px-4 py-4 lg:py-14 lg:px-8 lg:-mt-20 rounded-md bg-background lg:shadow-md dark:lg:border-b">
         <Form {...form}>
           <form
             className="flex flex-col space-y-4 lg:space-y-0 lg:space-x-4 lg:flex-row justify-between "

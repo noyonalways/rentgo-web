@@ -2,6 +2,7 @@ export { default as AboutUs } from "./about-us";
 export { default as CarDetails } from "./car-details";
 export { default as Cars } from "./cars";
 export { default as Home } from "./home";
+export { default as NotFound } from "./not-found";
 export { default as UserProfile } from "./user-profile";
 
 // auth pages

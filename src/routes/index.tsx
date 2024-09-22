@@ -1,6 +1,9 @@
 import { DashboardLayout, MainLayout } from "@/layouts";
 import {
   AdminOverview,
+  CarDetails,
+  ConfirmationBooking,
+  CreateBooking,
   Home,
   ManageAllBookings,
   ManageCars,
@@ -50,6 +53,18 @@ const router = createBrowserRouter([
       {
         path: "me",
         element: <UserProfile />,
+      },
+      {
+        path: "/cars/:id",
+        element: <CarDetails />,
+      },
+      {
+        path: "/cars/:id/booking",
+        element: <CreateBooking />,
+      },
+      {
+        path: "/cars/:id/confirm-booking",
+        element: <ConfirmationBooking />,
       },
     ],
   },

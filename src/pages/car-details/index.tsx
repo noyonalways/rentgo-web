@@ -2,6 +2,7 @@ import ImageMagnifier from "@/components/image-magnifier";
 import { Button } from "@/components/ui/button";
 import { Car, Check, Palette, User, Zap } from "lucide-react";
 import { PiNotification } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 interface IProps {}
 
@@ -122,9 +123,14 @@ const CarDetails: React.FC<IProps> = () => {
                 </div>
                 <p>SUV</p>
               </div>
-              <Button className="w-full" size="lg">
-                Book Now
-              </Button>
+              <Link
+                className="inline-block w-full"
+                to={`/cars/random-id/booking`}
+              >
+                <Button className="w-full" size="lg">
+                  Book Now
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

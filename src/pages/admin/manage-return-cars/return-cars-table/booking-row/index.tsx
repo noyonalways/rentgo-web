@@ -6,9 +6,17 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { hours } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -39,11 +47,18 @@ const BookingRow: React.FC<IProps> = ({ booking }) => {
     console.log("Form data:", {
       endTime: data.endTime,
       carName: booking.carName,
-    }); // Handle the form submission (e.g., send to an API)
+    });
 
     // Reset the form after submission
     form.reset();
   };
+
+  // Reset the select value when form is reset
+  useEffect(() => {
+    if (form.formState.isSubmitSuccessful) {
+      form.reset({ endTime: "" }); // Reset the endTime field explicitly
+    }
+  }, [form]);
 
   return (
     <TableRow>
@@ -59,13 +74,23 @@ const BookingRow: React.FC<IProps> = ({ booking }) => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="End Time"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? ""} // Control the select value
+                  >
+                    <FormControl>
+                      <SelectTrigger className="px-4 py-5 text-muted-foreground">
+                        <SelectValue placeholder="Select End Time" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {hours.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          {time}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

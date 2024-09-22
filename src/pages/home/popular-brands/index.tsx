@@ -31,7 +31,12 @@ const PopularBrands: React.FC<IProps> = () => {
   return (
     <section className="pb-20">
       <div className="container">
-        <h1 className="font-bold text-3xl text-center mb-16">Popular Brands</h1>
+        <div className="text-center space-y-2 mb-16">
+          <h3 className="text-primary font-semibold tracking-[.15rem]">
+            Popular Brands
+          </h3>
+          <h1 className="font-bold text-3xl">Popular Car Brands</h1>
+        </div>
         <Marquee
           speed={40}
           autoFill

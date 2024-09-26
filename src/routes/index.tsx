@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/protected-route";
 import { DashboardLayout, MainLayout } from "@/layouts";
 import {
   AboutUs,
@@ -81,7 +82,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/user",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "overview",

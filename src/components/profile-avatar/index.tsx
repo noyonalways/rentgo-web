@@ -9,14 +9,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { logout } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { Link } from "react-router-dom";
 
 interface IProps {
   align?: "start" | "end" | "center";
   size?: string;
+  profileImage?: string;
+  name?: string;
 }
 
-const ProfileAvatar: React.FC<IProps> = ({ align, size }) => {
+const ProfileAvatar: React.FC<IProps> = ({
+  align,
+  size,
+  profileImage,
+  name,
+}) => {
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,12 +40,12 @@ const ProfileAvatar: React.FC<IProps> = ({ align, size }) => {
           }`}
         >
           <AvatarImage
-            src="https://i.ibb.co.com/c64q254/noyon-logo-dark.png"
+            src={profileImage}
             alt="Customer avatar"
             className=" w-full "
           />
           <AvatarFallback className="bg-muted dark:bg-primary/15">
-            U
+            {name?.[0]}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -44,7 +58,11 @@ const ProfileAvatar: React.FC<IProps> = ({ align, size }) => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Button className="w-full" variant={"destructive"}>
+          <Button
+            onClick={handleLogout}
+            className="w-full"
+            variant={"destructive"}
+          >
             Log out
           </Button>
         </DropdownMenuItem>

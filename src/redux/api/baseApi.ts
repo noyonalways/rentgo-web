@@ -40,10 +40,11 @@ const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs> = async (
     );
 
     const data = await res.json();
-    if (data?.data?.accessToken) {
+
+    if (data.success) {
       const user = (api.getState() as RootState).auth.user;
 
-      api.dispatch(setUser({ user, token: data?.data?.accessToken }));
+      api.dispatch(setUser({ user: user!, token: data?.data?.token }));
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
@@ -53,7 +54,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs> = async (
   if (result.error?.status === 404) {
     toast.error((result.error.data as { message: string }).message, {
       position: "top-right",
-      style: { padding: 20 },
     });
   }
 

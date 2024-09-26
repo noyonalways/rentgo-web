@@ -1,12 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { JwtPayload } from "jwt-decode";
 import { RootState } from "../../store";
 
-export type TUser = {
-  userId: string;
-  role: string;
-  iat: string;
-  exp: string;
-};
+export type TUser =
+  | {
+      email: string;
+      role: string;
+      iat: string;
+      exp: string;
+    }
+  | JwtPayload;
 
 type TInitialState = {
   user: null | TUser;
@@ -22,7 +25,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action) => {
+    setUser: (state, action: PayloadAction<{ user: TUser; token: string }>) => {
       const { user, token } = action.payload;
       state.user = user;
       state.token = token;

@@ -7,21 +7,58 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useSigninMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { signInFormSchema } from "@/schemas";
+import { TError } from "@/types";
+import { verifyToken } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { z } from "zod";
 
 interface IProps {}
 
 const SignIn: React.FC<IProps> = () => {
+  const [isPassword, setIsPassword] = useState(true);
+  const [signIn] = useSigninMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
   });
 
-  const onSubmit = (data: z.infer<typeof signInFormSchema>) => {
-    console.log("data", data); // Handle the form submission (e.g., send to an API)
+  const onSubmit = async (data: z.infer<typeof signInFormSchema>) => {
+    const toastId = toast.loading("Sign in User...", {
+      duration: 2000,
+      position: "top-right",
+    });
+
+    try {
+      const result = await signIn(data).unwrap();
+      if (result.success) {
+        const user = verifyToken(result?.data?.token as string);
+        dispatch(setUser({ user: user, token: result.data?.token as string }));
+
+        toast.success(result?.message, {
+          id: toastId,
+          duration: 2000,
+          position: "top-right",
+        });
+        navigate("/");
+      }
+    } catch (err) {
+      const error = err as TError;
+      toast.error(error?.data?.message, {
+        id: toastId,
+        position: "top-right",
+      });
+    }
 
     // Reset the form after submission
     form.reset();
@@ -61,17 +98,24 @@ const SignIn: React.FC<IProps> = () => {
                 name="password"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="relative">
                     <FormControl>
                       <Input
                         className="px-4 py-5"
-                        type="password"
+                        type={isPassword ? "password" : "text"}
                         placeholder="Password"
                         {...field}
                         value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
+                    <button
+                      className="absolute right-2 top-[1px] size-6 flex items-center justify-center text-muted-foreground"
+                      onClick={() => setIsPassword(!isPassword)}
+                      type="button"
+                    >
+                      {isPassword ? <Eye size={16} /> : <EyeOff size={16} />}
+                    </button>
                   </FormItem>
                 )}
               />

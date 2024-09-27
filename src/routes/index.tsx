@@ -1,5 +1,4 @@
-import ProtectedRoute from "@/components/protected-route";
-import { DashboardLayout, MainLayout } from "@/layouts";
+import { DashboardLayout, MainLayout, ProtectedRoute } from "@/layouts";
 import {
   AboutUs,
   AdminOverview,
@@ -83,7 +82,7 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute role="user">
         <DashboardLayout />
       </ProtectedRoute>
     ),
@@ -104,7 +103,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute role="admin">
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "overview",

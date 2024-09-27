@@ -13,7 +13,7 @@ export interface TUser {
   drivingLicense: string;
   address: string;
   _id: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   __v: number;
 }

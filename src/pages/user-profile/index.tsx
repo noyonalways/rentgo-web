@@ -8,6 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useGetMeQuery } from "@/redux/features/auth/authApi";
 import {
   CalendarDays,
   Car,
@@ -19,32 +21,48 @@ import {
 } from "lucide-react";
 
 const UserProfile = () => {
+  const { data: currentUser, isLoading } = useGetMeQuery(undefined, {
+    refetchOnFocus: true,
+  });
+  const { name, email, createdAt, phone, address, dateOfBirth } =
+    currentUser?.data || {};
   return (
     <section className="pt-10 pb-20">
       <div className="container">
         <Card className="border-none shadow-none">
           <CardHeader className="flex flex-col sm:flex-row items-center gap-4 px-0">
-            <div className="flex justify-start space-x-4">
-              <Avatar className="w-24 h-24 sm:w-32 sm:h-32">
-                <AvatarImage
-                  src="https://i.ibb.co.com/c64q254/noyon-logo-dark.png"
-                  alt="Customer avatar"
-                />
-                <AvatarFallback className="bg-muted dark:bg-primary/15">
-                  JD
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-start sm:text-left space-y-2">
-                <CardTitle className="text-2xl sm:text-3xl">
-                  John Driver
-                </CardTitle>
-                <CardDescription>Registered since 2020</CardDescription>
-                <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
-                  <Badge variant="outline">Frequent Renter</Badge>
-                  <Badge variant="outline">Business Traveler</Badge>
+            {isLoading ? (
+              <div className="flex items-center space-x-4">
+                <Skeleton className="size-36 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-[250px]" />
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-[200px]" />
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="flex justify-start space-x-4">
+                <Avatar className="w-24 h-24 sm:w-32 sm:h-32">
+                  <AvatarImage
+                    src="https://i.ibb.co.com/c64q254/noyon-logo-dark.png"
+                    alt="Customer avatar"
+                  />
+                  <AvatarFallback className="bg-muted dark:bg-primary/15">
+                    JD
+                  </AvatarFallback>
+                </Avatar>
+                <div className="text-start sm:text-left space-y-2">
+                  <CardTitle className="text-2xl sm:text-3xl">{name}</CardTitle>
+                  <CardDescription>
+                    Registered since {new Date(createdAt!).toDateString()}
+                  </CardDescription>
+                  <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
+                    <Badge variant="outline">Frequent Renter</Badge>
+                    <Badge variant="outline">Business Traveler</Badge>
+                  </div>
+                </div>
+              </div>
+            )}
             <Button className="hidden lg:ml-auto sm:flex space-x-2 items-center">
               <Pencil size={16} />
               <span>Edit Profile</span>
@@ -60,19 +78,19 @@ const UserProfile = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-muted-foreground" />
-                  <span>San Francisco, CA</span>
+                  <span>{address}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CalendarDays className="w-4 h-4 text-muted-foreground" />
-                  <span>Member since June 2018</span>
+                  <span>{dateOfBirth?.split("T")[0]}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-muted-foreground" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>{phone}</span>
                 </div>
                 <div className="flex items-center gap-2 sm:col-span-2">
                   <Mail className="w-4 h-4 text-muted-foreground" />
-                  <span>john.driver@example.com</span>
+                  <span>{email}</span>
                 </div>
               </div>
             </div>

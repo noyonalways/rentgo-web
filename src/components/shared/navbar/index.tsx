@@ -3,9 +3,9 @@ import ProfileAvatar from "@/components/profile-avatar";
 import { Button } from "@/components/ui/button";
 import { useGetMeQuery } from "@/redux/features/auth/authApi";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/car.svg";
 
@@ -15,7 +15,7 @@ const Navbar: React.FC<IProps> = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Use the selector to automatically update when the user is logged in
-  const loggedInUser = useSelector(selectCurrentUser);
+  const loggedInUser = useAppSelector(selectCurrentUser);
   const { data: currentUser, isLoading } = useGetMeQuery(undefined, {
     skip: !loggedInUser, // Skip the query if not logged in
   });
@@ -100,11 +100,20 @@ const Navbar: React.FC<IProps> = () => {
 
           {/* Conditionally render based on user login state */}
           {!isLoading && loggedInUser ? (
-            <ProfileAvatar
-              align="end"
-              profileImage={currentUser?.data?.profileImage}
-              name={currentUser?.data?.name}
-            />
+            <div className="flex items-center space-x-6">
+              <ProfileAvatar
+                size="10"
+                align="end"
+                profileImage={currentUser?.data?.profileImage}
+                name={currentUser?.data?.name}
+              />
+              <button
+                className="inline-block lg:hidden active:scale-95 duration-50"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <Menu size={24} />
+              </button>
+            </div>
           ) : (
             <div className="flex items-center space-x-2">
               <ModeToggle />

@@ -1,5 +1,13 @@
 import { ModeToggle } from "@/components/mode-toggle";
+import ProfileAvatar from "@/components/profile-avatar";
 import { Button } from "@/components/ui/button";
+import { useGetMeQuery } from "@/redux/features/auth/authApi";
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+} from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { verifyToken } from "@/utils";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -9,6 +17,19 @@ interface IProps {}
 
 const Navbar: React.FC<IProps> = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Use the selector to automatically update when the user is logged in
+  const loggedInUser = useAppSelector(selectCurrentUser);
+  const token = useAppSelector(selectCurrentToken);
+
+  const { data: currentUser, isLoading } = useGetMeQuery(undefined, {
+    skip: !loggedInUser, // Skip the query if not logged in
+  });
+
+  let user;
+  if (token) {
+    user = verifyToken(token as string) as { role: "user" | "admin" };
+  }
 
   return (
     <header className="z-50 sticky top-0 bg-background border-b">
@@ -63,14 +84,21 @@ const Navbar: React.FC<IProps> = () => {
                 About Us
               </Link>
             </li>
-            <li>
-              <Link
-                className="hover:bg-primary py-4 px-4 block lg:hover:bg-transparent lg:hover:text-primary lg:py-0 lg:inline-block lg:px-0"
-                to="/user/overview"
-              >
-                Dashboard
-              </Link>
-            </li>
+            {!isLoading && loggedInUser && (
+              <li>
+                <Link
+                  className="hover:bg-primary py-4 px-4 block lg:hover:bg-transparent lg:hover:text-primary lg:py-0 lg:inline-block lg:px-0"
+                  to={
+                    (user?.role === "admin" && "/admin/overview") ||
+                    (user?.role === "user" && "user/overview") ||
+                    "/"
+                  }
+                >
+                  Dashboard
+                </Link>
+              </li>
+            )}
+
             <li className="lg:hidden flex flex-col px-2 space-y-2 pt-2">
               <Link to={"/signup"}>
                 <Button size={"lg"} variant={"outline"} className="w-full">
@@ -84,27 +112,47 @@ const Navbar: React.FC<IProps> = () => {
               </Link>
             </li>
           </ul>
-          <div className="flex items-center space-x-2">
-            <ModeToggle />
-            <button
-              className="inline-block lg:hidden active:scale-95 duration-50"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu size={24} />
-            </button>
-            <div className="space-x-2 hidden lg:inline-block">
-              <Link to={"/signup"}>
-                <Button size={"lg"} variant={"ghost"}>
-                  Sign Up
-                </Button>
-              </Link>
-              <Link to={"/signin"}>
-                <Button size={"lg"} variant={"default"}>
-                  Sign In
-                </Button>
-              </Link>
+
+          {/* Conditionally render based on user login state */}
+          {!isLoading && loggedInUser ? (
+            <div className="flex items-center space-x-6">
+              <ModeToggle />
+              <ProfileAvatar
+                size="10"
+                align="end"
+                profileImage={currentUser?.data?.profileImage}
+                name={currentUser?.data?.name}
+              />
+              <button
+                className="inline-block lg:hidden active:scale-95 duration-50"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <Menu size={24} />
+              </button>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center space-x-2">
+              <ModeToggle />
+              <button
+                className="inline-block lg:hidden active:scale-95 duration-50"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <Menu size={24} />
+              </button>
+              <div className="space-x-2 hidden lg:inline-block">
+                <Link to={"/signup"}>
+                  <Button size={"lg"} variant={"ghost"}>
+                    Sign Up
+                  </Button>
+                </Link>
+                <Link to={"/signin"}>
+                  <Button size={"lg"} variant={"default"}>
+                    Sign In
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
     </header>

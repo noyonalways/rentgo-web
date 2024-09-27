@@ -1,4 +1,4 @@
-import { DashboardLayout, MainLayout } from "@/layouts";
+import { DashboardLayout, MainLayout, ProtectedRoute } from "@/layouts";
 import {
   AboutUs,
   AdminOverview,
@@ -55,7 +55,11 @@ const router = createBrowserRouter([
       },
       {
         path: "me",
-        element: <UserProfile />,
+        element: (
+          <ProtectedRoute roles={["user", "admin"]}>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/cars",
@@ -81,7 +85,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/user",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute roles={["user"]}>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "overview",
@@ -99,7 +107,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "overview",

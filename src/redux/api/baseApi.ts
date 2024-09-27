@@ -28,7 +28,10 @@ const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs> = async (
 ) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result.error?.status === 401) {
+  if (
+    result.error?.status === 401 &&
+    (result.error.data as { message: string })?.message === "TokenExpiredError"
+  ) {
     console.log("Sending refresh token....");
 
     const res = await fetch(
@@ -40,10 +43,11 @@ const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs> = async (
     );
 
     const data = await res.json();
-    if (data?.data?.accessToken) {
+
+    if (data.success) {
       const user = (api.getState() as RootState).auth.user;
 
-      api.dispatch(setUser({ user, token: data?.data?.accessToken }));
+      api.dispatch(setUser({ user: user!, token: data?.data?.token }));
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
@@ -53,7 +57,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs> = async (
   if (result.error?.status === 404) {
     toast.error((result.error.data as { message: string }).message, {
       position: "top-right",
-      style: { padding: 20 },
     });
   }
 
@@ -64,5 +67,5 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),
-  tagTypes: [],
+  tagTypes: ["currentUser"],
 });

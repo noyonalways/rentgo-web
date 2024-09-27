@@ -1,6 +1,9 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import ProfileAvatar from "@/components/profile-avatar";
 import { Button } from "@/components/ui/button";
+import { selectCurrentToken } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { verifyToken } from "@/utils";
 import {
   Car,
   CarFront,
@@ -21,7 +24,10 @@ interface IProps {}
 
 const Sidebar: React.FC<IProps> = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const role: "user" | "admin" = "admin";
+  const token = useAppSelector(selectCurrentToken);
+
+  const user = verifyToken(token as string) as { role: "user" | "admin" };
+  const role: "user" | "admin" = user.role;
 
   const userLinks = (
     <>

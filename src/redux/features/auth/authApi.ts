@@ -1,8 +1,15 @@
 import { baseApi } from "@/redux/api/baseApi";
-import { TResponse, TSignInPayload, TSignUpPayload, TUser } from "@/types";
+import {
+  TResponse,
+  TSignInPayload,
+  TSignUpPayload,
+  TUpdateProfilePayload,
+  TUser,
+} from "@/types";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // sign up user
     signup: builder.mutation<TResponse<TUser>, TSignUpPayload>({
       query: (payload) => {
         return {
@@ -12,6 +19,8 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+
+    // sign in user
     signin: builder.mutation<TResponse<{ token: string }>, TSignInPayload>({
       query: (payload) => {
         return {
@@ -20,16 +29,37 @@ const authApi = baseApi.injectEndpoints({
           body: payload,
         };
       },
+      invalidatesTags: ["currentUser"],
     }),
-    getMe: builder.query<TResponse<TUser>, undefined>({
+
+    // get logged in user info
+    getMe: builder.query<TResponse<TUser>, undefined | void>({
       query: () => {
         return {
           url: "/auth/me",
           method: "GET",
         };
       },
+      providesTags: ["currentUser"],
+    }),
+
+    // update logged in user profile
+    updateProfile: builder.mutation<TResponse<TUser>, TUpdateProfilePayload>({
+      query: (payload) => {
+        return {
+          url: "/auth/update-profile",
+          method: "PATCH",
+          body: payload,
+        };
+      },
+      invalidatesTags: ["currentUser"],
     }),
   }),
 });
 
-export const { useSignupMutation, useSigninMutation, useGetMeQuery } = authApi;
+export const {
+  useSignupMutation,
+  useSigninMutation,
+  useGetMeQuery,
+  useUpdateProfileMutation,
+} = authApi;

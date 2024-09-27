@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,27 +9,30 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetMeQuery } from "@/redux/features/auth/authApi";
-import {
-  CalendarDays,
-  Car,
-  Info,
-  Mail,
-  MapPin,
-  Pencil,
-  Phone,
-} from "lucide-react";
+import { CalendarDays, Car, Info, Mail, MapPin, Phone } from "lucide-react";
+import UpdateProfileModal from "./update-profile-modal";
 
 const UserProfile = () => {
   const { data: currentUser, isLoading } = useGetMeQuery(undefined, {
     refetchOnFocus: true,
   });
-  const { name, email, createdAt, phone, address, dateOfBirth } =
-    currentUser?.data || {};
+  const {
+    name,
+    email,
+    createdAt,
+    profileImage,
+    phone,
+    address,
+    dateOfBirth,
+    drivingLicense,
+    nidOrPassport,
+    role,
+  } = currentUser?.data || {};
   return (
     <section className="pt-10 pb-20">
       <div className="container">
         <Card className="border-none shadow-none">
-          <CardHeader className="flex flex-col sm:flex-row items-center gap-4 px-0">
+          <CardHeader className="flex flex-col sm:flex-row lg:items-center gap-4 px-0">
             {isLoading ? (
               <div className="flex items-center space-x-4">
                 <Skeleton className="size-36 rounded-full" />
@@ -43,12 +45,9 @@ const UserProfile = () => {
             ) : (
               <div className="flex justify-start space-x-4">
                 <Avatar className="w-24 h-24 sm:w-32 sm:h-32">
-                  <AvatarImage
-                    src="https://i.ibb.co.com/c64q254/noyon-logo-dark.png"
-                    alt="Customer avatar"
-                  />
-                  <AvatarFallback className="bg-muted dark:bg-primary/15">
-                    JD
+                  <AvatarImage src={profileImage} alt="Customer avatar" />
+                  <AvatarFallback className="bg-muted dark:bg-primary/15 text-5xl font-bold">
+                    {name?.[0]}
                   </AvatarFallback>
                 </Avatar>
                 <div className="text-start sm:text-left space-y-2">
@@ -56,25 +55,37 @@ const UserProfile = () => {
                   <CardDescription>
                     Registered since {new Date(createdAt!).toDateString()}
                   </CardDescription>
-                  <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
-                    <Badge variant="outline">Frequent Renter</Badge>
-                    <Badge variant="outline">Business Traveler</Badge>
+                  <div className="flex gap-2 mt-2">
+                    <Badge variant="outline">
+                      {(role === "user" && "User") ||
+                        (role === "admin" && "Admin")}
+                    </Badge>
+                    {role === "user" && (
+                      <Badge variant="outline">Business Traveler</Badge>
+                    )}
                   </div>
                 </div>
               </div>
             )}
-            <Button className="hidden lg:ml-auto sm:flex space-x-2 items-center">
-              <Pencil size={16} />
-              <span>Edit Profile</span>
-            </Button>
+            <div className="hidden lg:inline-block lg:ml-auto ">
+              <UpdateProfileModal />
+            </div>
           </CardHeader>
-          <CardContent className="space-y-6 px-1 lg:px-0">
+          <CardContent className="space-y-6 px-0">
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">General Information</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid lg:grid-cols-2 gap-4">
                 <div className="flex items-center gap-2">
                   <Info className="w-4 h-4 text-muted-foreground" />
-                  <span>License: XX1234567</span>
+                  <span>
+                    License: {drivingLicense ? drivingLicense : "N/A"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Info className="w-4 h-4 text-muted-foreground" />
+                  <span>
+                    NID/Passport: {nidOrPassport ? nidOrPassport : "N/A"}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-muted-foreground" />
@@ -88,7 +99,7 @@ const UserProfile = () => {
                   <Phone className="w-4 h-4 text-muted-foreground" />
                   <span>{phone}</span>
                 </div>
-                <div className="flex items-center gap-2 sm:col-span-2">
+                <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-muted-foreground" />
                   <span>{email}</span>
                 </div>
@@ -162,9 +173,9 @@ const UserProfile = () => {
             </div>
           </CardContent>
         </Card>
-        <Button className="w-full mt-4 sm:hidden" size={"lg"}>
-          Edit Profile
-        </Button>
+        <div className="lg:hidden w-full">
+          <UpdateProfileModal />
+        </div>
       </div>
     </section>
   );

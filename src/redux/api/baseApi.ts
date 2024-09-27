@@ -28,7 +28,10 @@ const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs> = async (
 ) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result.error?.status === 401) {
+  if (
+    result.error?.status === 401 &&
+    (result.error.data as { message: string })?.message === "TokenExpiredError"
+  ) {
     console.log("Sending refresh token....");
 
     const res = await fetch(
@@ -64,5 +67,5 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),
-  tagTypes: [],
+  tagTypes: ["currentUser"],
 });

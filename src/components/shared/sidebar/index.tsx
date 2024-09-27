@@ -26,8 +26,7 @@ const Sidebar: React.FC<IProps> = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const token = useAppSelector(selectCurrentToken);
 
-  const user = verifyToken(token as string);
-
+  const user = verifyToken(token as string) as { role: "user" | "admin" };
   const role: "user" | "admin" = user.role;
 
   const userLinks = (

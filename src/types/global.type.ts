@@ -7,12 +7,19 @@ export type TMeta = {
   totalPages: number;
 };
 
+type TErrorMessage = {
+  message: string;
+  path: string;
+};
+
 export type TError = {
   data: {
+    errorMessages?: TErrorMessage[];
     message: string;
     stack: string;
     success: boolean;
   };
+
   status: number;
 };
 

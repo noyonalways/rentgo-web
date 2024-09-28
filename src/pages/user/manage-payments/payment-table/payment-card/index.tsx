@@ -21,9 +21,9 @@ const PaymentCard: React.FC<BookingCardProps> = ({
       <CardContent>
         <div className="grid grid-cols-2 gap-2 mb-4">
           <div className="text-sm font-medium">Booking Date:</div>
-          <div className="text-sm">{booking.bookingDate.split("T")[0]}</div>
+          <div className="text-sm">{booking.bookingDate?.split("T")[0]}</div>
           <div className="text-sm font-medium">Return Date:</div>
-          <div className="text-sm">{booking.returnDate.split("T")[0]}</div>
+          <div className="text-sm">{booking.returnDate?.split("T")[0]}</div>
           <div className="text-sm font-medium">Start Time:</div>
           <div className="text-sm">{booking.startTime}</div>
           <div className="text-sm font-medium">End Time:</div>

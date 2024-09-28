@@ -13,8 +13,8 @@ const PaymentRow: React.FC<BookingRowProps> = ({ booking, onPay }) => {
   return (
     <TableRow>
       <TableCell>{booking.car.name}</TableCell>
-      <TableCell>{booking.bookingDate.split("T")[0]}</TableCell>
-      <TableCell>{booking.returnDate.split("T")[0]}</TableCell>
+      <TableCell>{booking.bookingDate?.split("T")[0]}</TableCell>
+      <TableCell>{booking.returnDate?.split("T")[0]}</TableCell>
       <TableCell>{booking.startTime}</TableCell>
       <TableCell>{booking.endTime}</TableCell>
       <TableCell>৳{booking.car.pricePerHour}</TableCell>

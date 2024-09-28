@@ -12,7 +12,7 @@ const OverviewCard: React.FC<BookingCardProps> = ({ icon, count, label }) => {
       <div className="flex items-center space-x-2">
         <div className="text-primary">{icon}</div>
         <h2 className="text-2xl font-semibold">
-          {count.toString().padStart(2, "0")}
+          {count?.toString()?.padStart(2, "0")}
         </h2>
       </div>
       <p className="font-medium text-xs lg:text-base">{label}</p>

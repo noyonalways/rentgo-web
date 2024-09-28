@@ -1,57 +1,26 @@
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Edit, XCircle } from "lucide-react";
-
-interface Booking {
-  carName: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  status: string;
-}
+import { TBooking } from "@/types";
+import CancelBookingModal from "../cancel-booking-modal";
+import UpdateBookingModal from "../update-booking-modal";
 
 interface BookingTableRowProps {
-  booking: Booking;
-  onEdit: () => void;
-  onDelete: () => void;
+  booking: TBooking;
+  onCancel: () => void;
 }
 
-const BookingRow: React.FC<BookingTableRowProps> = ({
-  booking,
-  onEdit,
-  onDelete,
-}) => {
+const BookingRow: React.FC<BookingTableRowProps> = ({ booking, onCancel }) => {
   return (
     <TableRow>
-      <TableCell>{booking.carName}</TableCell>
-      <TableCell>{booking.date}</TableCell>
+      <TableCell>{booking.car.name}</TableCell>
+      <TableCell>{new Date(booking.bookingDate).toDateString()}</TableCell>
       <TableCell>{booking.startTime}</TableCell>
-      <TableCell>{booking.endTime}</TableCell>
+      <TableCell>{booking.endTime ? booking.endTime : "N/A"}</TableCell>
       <TableCell>{booking.status}</TableCell>
       <TableCell>
         <div className="flex space-x-2">
-          <Button
-            disabled={
-              booking.status === "Approved" || booking.status === "Canceled"
-            }
-            variant="outline"
-            size="icon"
-            className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-            onClick={onEdit}
-          >
-            <Edit size={16} />
-          </Button>
-          <Button
-            disabled={
-              booking.status === "Approved" || booking.status === "Canceled"
-            }
-            variant="outline"
-            size="icon"
-            className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-            onClick={onDelete}
-          >
-            <XCircle size={20} />
-          </Button>
+          <CancelBookingModal onCancel={onCancel} status={booking.status} />
+
+          <UpdateBookingModal status={booking.status} id={booking._id} />
         </div>
       </TableCell>
     </TableRow>

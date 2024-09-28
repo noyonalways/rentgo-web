@@ -13,10 +13,20 @@ export interface TBooking {
   nidOrPassport: string;
   drivingLicense: string;
   status: string;
+  phon: string;
   paymentStatus: string;
   totalHours: number;
   totalCost: number;
   createdAt: string;
   updatedAt: string;
   transactionId: string;
+}
+
+export interface TUpdateBooking {
+  bookingDate: string;
+  startTime: string;
+  bookingAddress: string;
+  nidOrPassport: string;
+  drivingLicense: string;
+  phone: string;
 }

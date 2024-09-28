@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/api/baseApi";
-import { TBooking, TResponse, TResponseRedux } from "@/types";
+import { TBooking, TResponse, TResponseRedux, TUpdateBooking } from "@/types";
 
 // Helper function to convert params object to URLSearchParams
 const toURLSearchParams = (params: Record<string, unknown>) => {
@@ -28,6 +28,7 @@ const bookingApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["myBookings"],
       transformResponse: (response: TResponseRedux<TBooking[]>) => {
         return {
           data: response?.data,
@@ -43,8 +44,34 @@ const bookingApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    // cancel a booking
+    cancelBooking: builder.mutation<TResponse<TBooking>, string>({
+      query: (bookingId) => ({
+        url: `/bookings/my-bookings/${bookingId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["myBookings"],
+    }),
+
+    // update booking
+    updateBooking: builder.mutation<
+      TResponse<TBooking>,
+      { bookingId: string; payload: Partial<TUpdateBooking> }
+    >({
+      query: ({ bookingId, payload }) => ({
+        url: `/bookings/my-bookings/${bookingId}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["myBookings"],
+    }),
   }),
 });
 
-export const { useGetUserBookingQuery, useGetBookingByTransactionIdQuery } =
-  bookingApi;
+export const {
+  useGetUserBookingQuery,
+  useGetBookingByTransactionIdQuery,
+  useCancelBookingMutation,
+  useUpdateBookingMutation,
+} = bookingApi;

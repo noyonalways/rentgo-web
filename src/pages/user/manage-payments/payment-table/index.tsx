@@ -21,11 +21,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 import PaymentCard from "./payment-card";
 import PaymentRow from "./payment-row";
-// Add a loader component
 
 const PaymentTable: React.FC = () => {
   const [page, setPage] = useState(1);
-  const limit = 10; // You can also fetch this dynamically if needed
+  const limit = 10;
 
   const [makePayment] = useMakePaymentMutation();
 
@@ -41,18 +40,17 @@ const PaymentTable: React.FC = () => {
         currency: "BDT",
         paymentMethod: "aamarpay",
       }).unwrap();
+
       if (response.success) {
-        toast.success(response?.message, {
+        toast.success(response.message, {
           id: toastId,
           duration: 2000,
           position: "top-right",
         });
-        // Clear the payment form
-        // Reset the state
-        setPage(1); // Reset the page to the first page
 
+        // Redirect to payment URL if present
         if (response.data?.result) {
-          window.location.href = response?.data?.payment_url;
+          window.location.href = response.data.payment_url;
         }
       }
     } catch (err) {
@@ -65,17 +63,18 @@ const PaymentTable: React.FC = () => {
   };
 
   const { data: result, isFetching } = useGetUserBookingQuery({
-    paymentStatus: ["pending", "cancelled"], // Pass an array for multiple statuses
+    paymentStatus: ["pending", "cancelled"],
+    status: ["approved"],
     page,
     limit,
   });
 
   const bookings = result?.data;
-  const meta = result?.meta; // Destructure metadata: { limit, page, total, totalPages }
+  const meta = result?.meta;
 
   // Function to handle page change
   const handlePageChange = (newPage: number) => {
-    if (newPage > 0 && newPage <= meta!.totalPages) {
+    if (newPage > 0 && meta && newPage <= meta.totalPages) {
       setPage(newPage);
     }
   };
@@ -86,25 +85,25 @@ const PaymentTable: React.FC = () => {
       <div className="md:hidden">
         {isFetching ? (
           <BouncingLoader />
-        ) : (
-          bookings?.map((booking) => (
+        ) : bookings && bookings.length > 0 ? (
+          bookings.map((booking) => (
             <PaymentCard
               key={booking._id}
               booking={booking}
               onPay={() => handlePay(booking._id)}
             />
           ))
+        ) : (
+          <p className="text-center">No data found</p>
         )}
       </div>
 
       {/* Desktop view */}
-      {bookings?.length === 0 ? (
-        <p className="text-center">No data found</p>
-      ) : (
-        <div className="hidden md:flex md:flex-col space-y-4">
-          {isFetching ? (
-            <BouncingLoader />
-          ) : (
+      <div className="hidden md:flex md:flex-col space-y-4">
+        {isFetching ? (
+          <BouncingLoader />
+        ) : bookings && bookings.length > 0 ? (
+          <>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -121,7 +120,7 @@ const PaymentTable: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {bookings?.map((booking) => (
+                {bookings.map((booking) => (
                   <PaymentRow
                     key={booking._id}
                     booking={booking}
@@ -130,40 +129,42 @@ const PaymentTable: React.FC = () => {
                 ))}
               </TableBody>
             </Table>
-          )}
 
-          {/* Pagination */}
-          {meta && (
-            <Pagination className="justify-end">
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    href="#"
-                    onClick={() => handlePageChange(page - 1)}
-                  />
-                </PaginationItem>
-                {Array.from({ length: meta.totalPages }, (_, index) => (
-                  <PaginationItem key={index}>
-                    <PaginationLink
+            {/* Pagination */}
+            {meta && (
+              <Pagination className="justify-end">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
                       href="#"
-                      isActive={page === index + 1}
-                      onClick={() => handlePageChange(index + 1)}
-                    >
-                      {index + 1}
-                    </PaginationLink>
+                      onClick={() => handlePageChange(page - 1)}
+                    />
                   </PaginationItem>
-                ))}
-                <PaginationItem>
-                  <PaginationNext
-                    href="#"
-                    onClick={() => handlePageChange(page + 1)}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          )}
-        </div>
-      )}
+                  {Array.from({ length: meta.totalPages }, (_, index) => (
+                    <PaginationItem key={index}>
+                      <PaginationLink
+                        href="#"
+                        isActive={page === index + 1}
+                        onClick={() => handlePageChange(index + 1)}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={() => handlePageChange(page + 1)}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            )}
+          </>
+        ) : (
+          <p className="text-center">No data found</p>
+        )}
+      </div>
     </div>
   );
 };

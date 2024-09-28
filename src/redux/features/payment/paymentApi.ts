@@ -1,5 +1,11 @@
 import { baseApi } from "@/redux/api/baseApi";
-import { TPayment, TPaymentPayload, TResponse, TResponseRedux } from "@/types";
+import {
+  TError,
+  TPayment,
+  TPaymentPayload,
+  TResponse,
+  TResponseRedux,
+} from "@/types";
 
 const paymentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -25,6 +31,12 @@ const paymentApi = baseApi.injectEndpoints({
         return {
           data: response?.data,
           meta: response?.meta,
+        };
+      },
+
+      transformErrorResponse: (error: TError) => {
+        return {
+          message: error.data.message,
         };
       },
     }),

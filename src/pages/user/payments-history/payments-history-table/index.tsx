@@ -1,3 +1,4 @@
+import BouncingLoader from "@/components/loader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -6,60 +7,77 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"; // Assuming you have these UI components
+} from "@/components/ui/table";
 import { useLoggedInUserPaymentsQuery } from "@/redux/features/payment/paymentApi";
 
 interface IProps {}
 
 const PaymentsHistoryTable: React.FC<IProps> = () => {
-  const { data, isLoading, isError } = useLoggedInUserPaymentsQuery(undefined);
-
-  if (isLoading) {
-    return <div>Loading payment history...</div>; // You can use a loading spinner or animation here
-  }
+  const { data, isLoading, isError, error } =
+    useLoggedInUserPaymentsQuery(undefined);
 
   if (isError) {
-    return <div>Error loading payment history.</div>; // Handle error appropriately
+    return <div>{(error as { message: string })?.message}</div>;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-4 items-center">
+        <BouncingLoader />
+        <p>Loading payment history...</p>
+      </div>
+    );
+  }
+
+  // Handle the case where there are no payments
+  if (data?.data?.length === 0) {
+    return (
+      <div className="text-center mt-4">
+        <p>No payment history available.</p>
+      </div>
+    );
   }
 
   return (
-    <div>
+    <>
       {/* Desktop table view */}
       <div className="hidden md:block">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Transaction ID</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Paid At</TableHead>
-              <TableHead>Payment Method</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data?.data?.map((payment) => (
-              <TableRow key={payment._id}>
-                <TableCell>{payment.transactionId}</TableCell>
-                <TableCell>
-                  {payment.amount} {payment.currency}
-                </TableCell>
-                <TableCell>{payment.status}</TableCell>
-                <TableCell>
-                  {new Date(payment.paidAt).toLocaleString()}
-                </TableCell>
-                <TableCell>{payment.paymentMethod}</TableCell>
+        {data?.data?.length && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Transaction ID</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Paid At</TableHead>
+                <TableHead>Payment Method</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {data?.data?.map((payment) => (
+                <TableRow key={payment._id}>
+                  <TableCell>{payment.transactionId}</TableCell>
+                  <TableCell>
+                    {payment.amount} {payment.currency}
+                  </TableCell>
+                  <TableCell>{payment.status}</TableCell>
+                  <TableCell>
+                    {new Date(payment.paidAt).toLocaleString()}
+                  </TableCell>
+                  <TableCell>{payment.paymentMethod}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
 
       {/* Mobile card view */}
       <div className="md:hidden space-y-4">
         {data?.data?.map((payment) => (
-          <Card className="mb-4">
+          <Card className="mb-4" key={payment._id}>
             <CardHeader>
-              <CardTitle>{payment.booking.car.name}</CardTitle>
+              <CardTitle>{payment.booking?.car?.name || "Car Name"}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-2 mb-4">
@@ -86,7 +104,7 @@ const PaymentsHistoryTable: React.FC<IProps> = () => {
           </Card>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

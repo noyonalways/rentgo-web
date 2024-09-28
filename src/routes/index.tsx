@@ -16,6 +16,7 @@ import {
   NotFound,
   PaymentCancel,
   PaymentFailed,
+  PaymentsHistory,
   PaymentSuccess,
   SignIn,
   SignUp,
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
       {
         path: "manage-payments",
         element: <ManagePayments />,
+      },
+      {
+        path: "payments-history",
+        element: <PaymentsHistory />,
       },
     ],
   },

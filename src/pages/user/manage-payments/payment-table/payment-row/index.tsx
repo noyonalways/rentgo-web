@@ -1,50 +1,36 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { TBooking } from "@/types";
 import { Link } from "react-router-dom";
 
-interface Booking {
-  carName: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  pricePerHour: number;
-  totalHours: number;
-  totalCost: number;
-  status: string;
-}
-
 interface BookingRowProps {
-  booking: Booking;
-  onViewCar?: () => void;
+  booking: TBooking;
   onPay?: () => void;
 }
 
-const PaymentRow: React.FC<BookingRowProps> = ({
-  booking,
-  onViewCar,
-  onPay,
-}) => {
+const PaymentRow: React.FC<BookingRowProps> = ({ booking, onPay }) => {
   return (
     <TableRow>
-      <TableCell>{booking.carName}</TableCell>
-      <TableCell>{booking.date}</TableCell>
+      <TableCell>{booking.car.name}</TableCell>
+      <TableCell>{booking.bookingDate.split("T")[0]}</TableCell>
+      <TableCell>{booking.returnDate.split("T")[0]}</TableCell>
       <TableCell>{booking.startTime}</TableCell>
       <TableCell>{booking.endTime}</TableCell>
-      <TableCell>৳{booking.pricePerHour}</TableCell>
+      <TableCell>৳{booking.car.pricePerHour}</TableCell>
       <TableCell>{booking.totalHours} hrs</TableCell>
       <TableCell>৳{booking.totalCost}</TableCell>
       <TableCell>
         <Badge variant="outline">{booking.status}</Badge>
       </TableCell>
       <TableCell className="space-x-2">
-        <Link to={"/"} onClick={onViewCar}>
+        <Link to={`/cars/${booking.car._id}`}>
           <Button variant={"outline"} size={"sm"}>
             View Car
           </Button>
         </Link>
         <Button
-          disabled={booking.status !== "Completed"}
+          disabled={booking.paymentStatus === "paid"}
           size={"sm"}
           onClick={onPay}
         >

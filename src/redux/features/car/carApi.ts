@@ -39,6 +39,15 @@ const carApi = baseApi.injectEndpoints({
       invalidatesTags: ["allCars"],
     }),
 
+    // delete a car
+    deleteCar: builder.mutation<TResponse<TCar>, string>({
+      query: (carId) => ({
+        url: `/cars/${carId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["allCars"],
+    }),
+
     // return car
     returnCar: builder.mutation({
       query: (payload) => ({
@@ -56,4 +65,5 @@ export const {
   useReturnCarMutation,
   useAddNewCarMutation,
   useGetSingleCarQuery,
+  useDeleteCarMutation,
 } = carApi;

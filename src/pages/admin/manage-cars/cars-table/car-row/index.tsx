@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { TCar } from "@/types";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit } from "lucide-react";
+import DeleteCarModal from "../../delete-car-modal";
 
 interface CarTableRowProps extends TCar {}
 
 const CarRow: React.FC<CarTableRowProps> = ({
+  _id,
   name,
   model,
   year,
@@ -23,15 +25,8 @@ const CarRow: React.FC<CarTableRowProps> = ({
       <TableCell>{status}</TableCell>
       <TableCell>
         <div className="flex space-x-2">
-          <Button
-            title="Delete Car"
-            disabled={status === "unavailable"}
-            variant="outline"
-            size="icon"
-            className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-          >
-            <Trash2 size={16} />
-          </Button>
+          <DeleteCarModal status={status} id={_id} />
+
           <Button
             title="Edit Car"
             disabled={status === "unavailable"}

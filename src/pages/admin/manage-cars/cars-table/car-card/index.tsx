@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TCar } from "@/types";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit } from "lucide-react";
+import DeleteCarModal from "../../delete-car-modal";
 
 interface CarTableRowProps extends TCar {}
 
 const CarCard: React.FC<CarTableRowProps> = ({
+  _id,
   name,
   model,
   year,
@@ -32,14 +34,8 @@ const CarCard: React.FC<CarTableRowProps> = ({
           <div className="text-sm">{status}</div>
         </div>
         <div className="flex space-x-2 mt-4 justify-end">
-          <Button
-            disabled={status === "Unavailable"}
-            variant="outline"
-            size="icon"
-            className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-          >
-            <Trash2 size={16} />
-          </Button>
+          <DeleteCarModal status={status} id={_id} />
+
           <Button
             disabled={status === "Unavailable"}
             variant="outline"

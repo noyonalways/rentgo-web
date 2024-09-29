@@ -1,11 +1,13 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { TUser } from "@/types";
+import BlockUserModal from "../block-user-modal";
+import MakeAdminModal from "../make-admin-modal";
+import UnblockUserModal from "../unblock-user-modal";
 
 interface IProps extends TUser {}
 
-const UserRow: React.FC<IProps> = ({ name, email, role, status }) => {
+const UserRow: React.FC<IProps> = ({ name, email, role, status, _id }) => {
   return (
     <TableRow>
       <TableCell>{name}</TableCell>
@@ -20,22 +22,12 @@ const UserRow: React.FC<IProps> = ({ name, email, role, status }) => {
       </TableCell>
       <TableCell>
         {status === "blocked" ? (
-          <Button size="sm" variant="outline">
-            Unblock
-          </Button>
+          <UnblockUserModal role={role} id={_id} />
         ) : (
-          <Button disabled={role === "admin"} size="sm" variant="outline">
-            Block
-          </Button>
+          <BlockUserModal role={role} id={_id} />
         )}
-        <Button
-          disabled={role === "admin" || status === "blocked"}
-          size="sm"
-          variant="default"
-          className="ml-2"
-        >
-          Make Admin
-        </Button>
+
+        <MakeAdminModal role={role} id={_id} status={status} />
       </TableCell>
     </TableRow>
   );

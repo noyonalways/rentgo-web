@@ -1,11 +1,13 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TUser } from "@/types";
+import BlockUserModal from "../block-user-modal";
+import MakeAdminModal from "../make-admin-modal";
+import UnblockUserModal from "../unblock-user-modal";
 
 interface IProps extends TUser {}
 
-const UserCard: React.FC<IProps> = ({ name, email, role, status }) => {
+const UserCard: React.FC<IProps> = ({ name, email, role, status, _id }) => {
   return (
     <Card className="mb-4 shadow-md">
       <CardHeader>
@@ -29,23 +31,12 @@ const UserCard: React.FC<IProps> = ({ name, email, role, status }) => {
 
         <div className="flex space-x-2 mt-4 justify-end">
           {status === "blocked" ? (
-            <Button size="sm" variant="outline">
-              Unblock
-            </Button>
+            <UnblockUserModal role={role} id={_id} />
           ) : (
-            <Button disabled={role === "admin"} size="sm" variant="outline">
-              Block
-            </Button>
+            <BlockUserModal role={role} id={_id} />
           )}
 
-          <Button
-            disabled={role === "admin" || status === "blocked"}
-            size="sm"
-            variant="default"
-            className="ml-2"
-          >
-            Make Admin
-          </Button>
+          <MakeAdminModal role={role} id={_id} status={status} />
         </div>
       </CardContent>
     </Card>

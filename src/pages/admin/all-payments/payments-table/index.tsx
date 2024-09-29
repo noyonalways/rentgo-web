@@ -47,6 +47,7 @@ const PaymentsTable: React.FC<IProps> = () => {
               <TableRow>
                 <TableHead>Transaction ID</TableHead>
                 <TableHead>UserName</TableHead>
+                <TableHead>Car</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Paid At</TableHead>
@@ -58,6 +59,7 @@ const PaymentsTable: React.FC<IProps> = () => {
                 <TableRow key={payment._id}>
                   <TableCell>{payment.transactionId}</TableCell>
                   <TableCell>{payment.user.name}</TableCell>
+                  <TableCell>{payment.booking.car.name}</TableCell>
                   <TableCell>
                     {payment.amount} {payment.currency}
                   </TableCell>
@@ -78,10 +80,13 @@ const PaymentsTable: React.FC<IProps> = () => {
         {data?.data?.map((payment) => (
           <Card className="mb-4" key={payment._id}>
             <CardHeader>
-              <CardTitle>{payment.booking?.car?.name || "Car Name"}</CardTitle>
+              <CardTitle>{payment?.user?.name}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-2 mb-4">
+                <div className="text-sm font-medium">Car Name:</div>
+                <div className="text-sm">{payment.booking.car.name}</div>
+
                 <div className="text-sm font-medium">Transaction ID:</div>
                 <div className="text-sm">{payment.transactionId}</div>
 

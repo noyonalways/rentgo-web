@@ -5,6 +5,10 @@ import { Link } from "react-router-dom";
 interface IProps {}
 
 const Cancelled: React.FC<IProps> = () => {
+  // const location = useLocation();
+  // const queryParams = new URLSearchParams(location.search);
+  // const transactionId = queryParams.get("transactionId");
+
   return (
     <section className="pt-10 pb-20">
       <div className="container">

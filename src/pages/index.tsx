@@ -19,6 +19,7 @@ export {
 // admin pages
 export {
   AdminOverview,
+  AllPayments,
   ManageAllBookings,
   ManageCars,
   ManageReturnCars,

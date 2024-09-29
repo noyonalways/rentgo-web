@@ -52,7 +52,7 @@ const CancelBookingModal: React.FC<IProps> = ({ id, status }) => {
             status === "approved" ||
             status === "completed"
           }
-          title="Approve Booking"
+          title="Cancel Booking"
           variant="outline"
           size="icon"
           className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"

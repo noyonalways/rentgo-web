@@ -24,6 +24,17 @@ const bookingApi = baseApi.injectEndpoints({
       },
     }),
 
+    // book a car (logged in user)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    bookCar: builder.mutation<TResponse<TBooking>, any>({
+      query: (payload) => ({
+        url: `/bookings`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["myBookings"],
+    }),
+
     // get single booking by transaction id
     getBookingByTransactionId: builder.query<TResponse<TBooking>, string>({
       query: (transactionId) => ({
@@ -61,4 +72,5 @@ export const {
   useGetBookingByTransactionIdQuery,
   useCancelLoggedInUserBookingMutation,
   useUpdateBookingMutation,
+  useBookCarMutation,
 } = bookingApi;

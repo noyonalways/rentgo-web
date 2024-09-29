@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { useGetAllCarsQuery } from "@/redux/features/car/carApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Search } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
@@ -40,6 +41,10 @@ const searchCarSchema = z.object({
 });
 
 const Cars: React.FC<IProps> = () => {
+  const { data } = useGetAllCarsQuery(undefined);
+
+  const cars = data?.data;
+
   const form = useForm<z.infer<typeof searchCarSchema>>({
     resolver: zodResolver(searchCarSchema),
   });
@@ -325,10 +330,9 @@ const Cars: React.FC<IProps> = () => {
 
             {/* all cars */}
             <div className="grid grid-cols-1 lg:grid-cols-2 mt-6 gap-6">
-              <CarCard />
-              <CarCard />
-              <CarCard />
-              <CarCard />
+              {cars?.map((car) => (
+                <CarCard key={car._id} {...car} />
+              ))}
             </div>
           </div>
         </div>

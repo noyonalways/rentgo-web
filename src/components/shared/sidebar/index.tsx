@@ -148,6 +148,18 @@ const Sidebar: React.FC<IProps> = () => {
           </Button>
         </Link>
       </li>
+      <li>
+        <Link className="block w-full" to={"/admin/all-payments"}>
+          <Button
+            variant="secondary"
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <CreditCard size={16} />
+            <span>All Payments</span>
+          </Button>
+        </Link>
+      </li>
     </>
   );
 

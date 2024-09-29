@@ -2,6 +2,7 @@ import { DashboardLayout, MainLayout, ProtectedRoute } from "@/layouts";
 import {
   AboutUs,
   AdminOverview,
+  AllPayments,
   CarDetails,
   Cars,
   ConfirmationBooking,
@@ -23,6 +24,7 @@ import {
   UserOverview,
   UserProfile,
 } from "@/pages";
+
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -73,14 +75,18 @@ const router = createBrowserRouter([
       {
         path: "/cars/:id/booking",
         element: (
-          <ProtectedRoute roles={["user", "admin"]}>
+          <ProtectedRoute roles={["user"]}>
             <CreateBooking />
           </ProtectedRoute>
         ),
       },
       {
         path: "/cars/:id/confirm-booking",
-        element: <ConfirmationBooking />,
+        element: (
+          <ProtectedRoute roles={["user"]}>
+            <ConfirmationBooking />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "about-us",
@@ -141,6 +147,10 @@ const router = createBrowserRouter([
       {
         path: "manage-users",
         element: <ManageUsers />,
+      },
+      {
+        path: "all-payments",
+        element: <AllPayments />,
       },
     ],
   },

@@ -7,7 +7,6 @@ import { Link, useLocation } from "react-router-dom";
 interface IProps {}
 
 const Success: React.FC<IProps> = () => {
-  // Hook to access the current location
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const transactionId = queryParams.get("transactionId");

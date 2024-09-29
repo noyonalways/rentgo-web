@@ -2,7 +2,7 @@ import DashboardSectionTitle from "@/components/dashboard-section-title";
 import BouncingLoader from "@/components/loader";
 import OverviewCard from "@/components/overview-card";
 import { useGetUserBookingQuery } from "@/redux/features/user/booking/bookingApi";
-import { CircleCheck, CircleEllipsis, CircleX } from "lucide-react";
+import { CheckCheck, CircleCheck, CircleEllipsis, CircleX } from "lucide-react";
 import { AiOutlineBook } from "react-icons/ai";
 import LatestBookings from "./latest-bookings";
 import OverviewBarChart from "./overview-barchart";
@@ -19,12 +19,19 @@ const Overview: React.FC<IProps> = () => {
   const { data: canceledBookings, isFetching: isCanceledBookings } =
     useGetUserBookingQuery({ status: ["canceled"] });
 
+  const { data: approvedBookings, isFetching: isApprovedBookings } =
+    useGetUserBookingQuery({ status: ["approved"] });
+
   const isLoading =
-    isPendingBookings || isCompletedBookings || isCanceledBookings;
+    isPendingBookings ||
+    isCompletedBookings ||
+    isCanceledBookings ||
+    isApprovedBookings;
 
   const totalBookingsCount =
     (pendingBookings?.data?.length || 0) +
     (completedBookings?.data?.length || 0) +
+    (approvedBookings?.data?.length || 0) +
     (canceledBookings?.data?.length || 0);
 
   const userOverview = [
@@ -37,6 +44,11 @@ const Overview: React.FC<IProps> = () => {
       icon: <CircleEllipsis size={32} />,
       count: pendingBookings?.data?.length || 0,
       label: "Pending Bookings",
+    },
+    {
+      icon: <CheckCheck size={32} />,
+      count: approvedBookings?.data?.length || 0,
+      label: "Approved Bookings",
     },
     {
       icon: <CircleCheck size={32} />,

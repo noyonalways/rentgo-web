@@ -16,38 +16,48 @@ import {
 
 export const description = "A bar chart with custom labels for bookings";
 
-// Updated chart data for bookings
-const chartData = [
-  { type: "Total Booking", count: 400 },
-  { type: "Available Cars", count: 50 },
-  { type: "Total Revenue", count: 1000 },
-  { type: "Total User", count: 280 },
-];
+interface IProps {
+  totalBookings: number;
+  availableCars: number;
+  totalRevenue: number;
+  totalUsers: number;
+}
 
-// Updated chart configuration for each booking type
-const chartConfig = {
-  total: {
-    label: "Total Bookings",
-    color: "hsl(var(--primary))",
-  },
-  pending: {
-    label: "Available Cars",
-    color: "hsl(var(--primary))",
-  },
-  completed: {
-    label: "Total Revenue",
-    color: "hsl(var(--primary))",
-  },
-  canceled: {
-    label: "Total User",
-    color: "hsl(var(--primary))",
-  },
-  label: {
-    color: "hsl(var(--background))",
-  },
-} satisfies ChartConfig;
+const OverviewBarChart: React.FC<IProps> = ({
+  totalBookings,
+  availableCars,
+  totalRevenue,
+  totalUsers,
+}) => {
+  const chartConfig = {
+    total: {
+      label: "Total Bookings",
+      color: "hsl(var(--primary))",
+    },
+    pending: {
+      label: "Available Cars",
+      color: "hsl(var(--primary))",
+    },
+    completed: {
+      label: "Total Revenue",
+      color: "hsl(var(--primary))",
+    },
+    canceled: {
+      label: "Total User",
+      color: "hsl(var(--primary))",
+    },
+    label: {
+      color: "hsl(var(--background))",
+    },
+  } satisfies ChartConfig;
 
-const OverviewBarChart: React.FC = () => {
+  const chartData = [
+    { type: "Total Bookings", count: totalBookings },
+    { type: "Available Cars", count: availableCars },
+    { type: "Total Revenue", count: totalRevenue },
+    { type: "Total Users", count: totalUsers },
+  ];
+
   return (
     <Card>
       <CardContent className="pt-4">
@@ -74,7 +84,6 @@ const OverviewBarChart: React.FC = () => {
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
-            {/* Different bars for each booking type with custom labels */}
             <Bar
               dataKey="count"
               layout="vertical"

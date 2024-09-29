@@ -33,15 +33,45 @@ const paymentApi = baseApi.injectEndpoints({
           meta: response?.meta,
         };
       },
-
       transformErrorResponse: (error: TError) => {
         return {
           message: error.data.message,
         };
       },
     }),
+
+    // all payments (admin only)
+    getAllPayments: builder.query({
+      query: () => ({
+        url: "/payments",
+        method: "GET",
+      }),
+      transformResponse: (response: TResponseRedux<TPayment[]>) => {
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+      transformErrorResponse: (error: TError) => {
+        return {
+          message: error.data.message,
+        };
+      },
+    }),
+
+    // get total revenue (admin only)
+    getTotalRevenue: builder.query<TResponse<{ totalRevenue: number }>, void>({
+      query: () => ({
+        url: "/payments/total-revenue",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useMakePaymentMutation, useLoggedInUserPaymentsQuery } =
-  paymentApi;
+export const {
+  useMakePaymentMutation,
+  useLoggedInUserPaymentsQuery,
+  useGetAllPaymentsQuery,
+  useGetTotalRevenueQuery,
+} = paymentApi;

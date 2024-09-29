@@ -22,8 +22,8 @@ export const createBookingSchema = z.object({
   startTime: z.string({
     required_error: "Please Select Start Time",
   }),
-  date: z.date({
-    required_error: "Date is required",
+  bookingDate: z.date({
+    required_error: "Booking Date is required",
   }),
 });
 

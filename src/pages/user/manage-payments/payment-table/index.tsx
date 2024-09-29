@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useGetMeQuery } from "@/redux/features/auth/authApi";
 import { useMakePaymentMutation } from "@/redux/features/payment/paymentApi";
 import { useGetUserBookingQuery } from "@/redux/features/user/booking/bookingApi";
 import { TError } from "@/types";
@@ -23,6 +24,11 @@ import PaymentCard from "./payment-card";
 import PaymentRow from "./payment-row";
 
 const PaymentTable: React.FC = () => {
+  const { data: currentUser } = useGetMeQuery(undefined, {
+    refetchOnFocus: true,
+  });
+  const { _id } = currentUser?.data || {};
+
   const [page, setPage] = useState(1);
   const limit = 10;
 
@@ -36,6 +42,7 @@ const PaymentTable: React.FC = () => {
 
     try {
       const response = await makePayment({
+        user: _id as string,
         booking: bookingId,
         currency: "BDT",
         paymentMethod: "aamarpay",

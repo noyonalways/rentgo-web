@@ -1,13 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TUser } from "@/types";
 
-interface IProps {
-  name: string;
-  email: string;
-  role: string;
-  status: "Active" | "Blocked";
-}
+interface IProps extends TUser {}
 
 const UserCard: React.FC<IProps> = ({ name, email, role, status }) => {
   return (
@@ -16,14 +12,14 @@ const UserCard: React.FC<IProps> = ({ name, email, role, status }) => {
         <CardTitle className="text-lg font-semibold">{name}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 gap-2 text-sm">
+        <div className="grid grid-cols-4 gap-2 text-sm">
           <div className="font-medium">Email:</div>
-          <div>{email}</div>
+          <div className="col-span-3">{email}</div>
           <div className="font-medium">Role:</div>
-          <div>{role}</div>
+          <div className="col-span-3">{role}</div>
           <div className="font-medium">Status:</div>
-          <div>
-            {status === "Active" ? (
+          <div className="col-span-3">
+            {status === "active" ? (
               <Badge variant="secondary">{status}</Badge>
             ) : (
               <Badge variant="destructive">{status}</Badge>
@@ -31,32 +27,25 @@ const UserCard: React.FC<IProps> = ({ name, email, role, status }) => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex space-x-2 mt-4 justify-end">
-          {status === "Blocked" ? (
+          {status === "blocked" ? (
             <Button size="sm" variant="outline">
               Unblock
             </Button>
           ) : (
-            <Button size="sm" variant="outline">
+            <Button disabled={role === "admin"} size="sm" variant="outline">
               Block
             </Button>
           )}
 
-          {role === "Admin" ? (
-            <Button size="sm" variant="outline" className="ml-2">
-              Remove Admin
-            </Button>
-          ) : (
-            <Button
-              disabled={status === "Blocked"}
-              size="sm"
-              variant="default"
-              className="ml-2"
-            >
-              Make Admin
-            </Button>
-          )}
+          <Button
+            disabled={role === "admin" || status === "blocked"}
+            size="sm"
+            variant="default"
+            className="ml-2"
+          >
+            Make Admin
+          </Button>
         </div>
       </CardContent>
     </Card>

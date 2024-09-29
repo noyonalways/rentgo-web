@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  useCancelBookingMutation,
+  useCancelLoggedInUserBookingMutation,
   useGetUserBookingQuery,
 } from "@/redux/features/user/booking/bookingApi";
 import { TError } from "@/types";
@@ -25,7 +25,7 @@ const LatestBookings: React.FC<IProps> = () => {
 
   const bookings = result?.data;
 
-  const [cancelBooking] = useCancelBookingMutation();
+  const [cancelBooking] = useCancelLoggedInUserBookingMutation();
 
   const handleCancel = async (bookingId: string) => {
     const toastId = toast.loading("Canceling the Booking...", {

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { hours } from "@/constants";
 import { cn } from "@/lib/utils";
+import { useGetSingleCarQuery } from "@/redux/features/car/carApi";
 import { createBookingSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -38,11 +39,29 @@ import {
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { PiNotification } from "react-icons/pi";
+import { useParams } from "react-router-dom";
 import { z } from "zod";
 
 interface IProps {}
 
 const CreateBooking: React.FC<IProps> = () => {
+  const params = useParams();
+
+  const { data, isLoading } = useGetSingleCarQuery(params?.id as string);
+
+  const {
+    name,
+    description,
+    type,
+    seatCapacity,
+    isElectric,
+    color,
+    status,
+    pricePerHour,
+    galleryImages,
+    features,
+  } = data?.data ?? {};
+
   const form = useForm<z.infer<typeof createBookingSchema>>({
     resolver: zodResolver(createBookingSchema),
   });
@@ -77,7 +96,7 @@ const CreateBooking: React.FC<IProps> = () => {
             <h3 className="text-primary font-semibold tracking-[.15rem]">
               SUV
             </h3>
-            <h1 className="font-bold text-4xl text-white">Range Rover</h1>
+            <h1 className="font-bold text-4xl text-white">{}</h1>
           </div>
         </div>
       </div>
@@ -86,53 +105,57 @@ const CreateBooking: React.FC<IProps> = () => {
           <div className="basis-full lg:basis-[60%] space-y-8">
             <div className="space-y-4">
               <h2 className="text-2xl font-semibold">General Information</h2>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
-                mollitia, molestiae quas vel sint commodi repudiandae
-                consequuntur voluptatum laborum numquam blanditiis harum
-                quisquam eius sed odit fugiat iusto fuga praesentium optio,
-                eaque rerum! Provident similique accusantium nemo autem.
-              </p>
+              <p>{description}</p>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <div className="bg-secondary inline-block p-4 ro rounded-full">
-                  <Check size={20} className="text-primary" />
-                </div>
-                <p>24/7 Support Assistance</p>
+            <div className="grid lg:grid-cols-2 gap-4">
+              <div className="space-y-4">
+                {features &&
+                  features.map((feature) => (
+                    <div key={feature} className="flex items-center space-x-4">
+                      <div className="bg-secondary inline-block p-3 ro rounded-full">
+                        <Check size={16} className="text-primary" />
+                      </div>
+                      <p>{feature}</p>
+                    </div>
+                  ))}
               </div>
-              <div className="flex items-center space-x-4">
-                <div className="bg-secondary inline-block p-4 ro rounded-full">
-                  <Check size={20} className="text-primary" />
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="bg-secondary inline-block p-3 ro rounded-full">
+                    <Check size={16} className="text-primary" />
+                  </div>
+                  <p>24/7 Support Assistance</p>
                 </div>
-                <p>Free Cancellation and Return</p>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="bg-secondary inline-block p-4 ro rounded-full">
-                  <Check size={20} className="text-primary" />
+                <div className="flex items-center space-x-4">
+                  <div className="bg-secondary inline-block p-3 ro rounded-full">
+                    <Check size={16} className="text-primary" />
+                  </div>
+                  <p>Free Cancellation and Return</p>
                 </div>
-                <p>Rent Now Pay When Return</p>
+                <div className="flex items-center space-x-4">
+                  <div className="bg-secondary inline-block p-3 ro rounded-full">
+                    <Check size={16} className="text-primary" />
+                  </div>
+                  <p>Rent Now Pay When Return</p>
+                </div>
               </div>
             </div>
 
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold">Gallery Images</h2>
               <div className="grid lg:grid-cols-2 gap-4">
-                <ImageMagnifier
-                  src="https://i.ibb.co.com/kqpbXz8/white-sample-car.png"
-                  alt="car-image"
-                  width={500}
-                  height={500}
-                  className="border rounded-xl"
-                />
-                <ImageMagnifier
-                  src="https://i.ibb.co.com/kqpbXz8/white-sample-car.png"
-                  alt="car-image"
-                  width={500}
-                  height={500}
-                  className="border rounded-xl"
-                />
+                {galleryImages &&
+                  galleryImages.map((img) => (
+                    <ImageMagnifier
+                      key={img._id}
+                      src={img.url}
+                      alt="car-image"
+                      width={500}
+                      height={500}
+                      className="border rounded-xl"
+                    />
+                  ))}
               </div>
             </div>
           </div>
@@ -147,35 +170,35 @@ const CreateBooking: React.FC<IProps> = () => {
                   <Car size={20} className="text-primary" />
                   <span>Car Type</span>
                 </div>
-                <p>SUV</p>
+                <p>{type}</p>
               </div>
               <div className="grid grid-cols-2">
                 <div className="flex items-center space-x-2">
                   <User size={20} className="text-primary" />
                   <span>Passengers</span>
                 </div>
-                <p>04</p>
+                <p>{seatCapacity}</p>
               </div>
               <div className="grid grid-cols-2">
                 <div className="flex items-center space-x-2">
                   <Zap size={20} className="text-primary" />
                   <span>Electric</span>
                 </div>
-                <p>No</p>
+                <p>{isElectric ? "Yes" : "No"}</p>
               </div>
               <div className="grid grid-cols-2">
                 <div className="flex items-center space-x-2">
                   <Palette size={20} className="text-primary" />
                   <span>Color</span>
                 </div>
-                <p>SUV</p>
+                <p>{color}</p>
               </div>
               <div className="grid grid-cols-2">
                 <div className="flex items-center space-x-2">
                   <PiNotification size={20} className="text-primary" />
                   <span>Status</span>
                 </div>
-                <p>Available</p>
+                <p>{status}</p>
               </div>
 
               <div>

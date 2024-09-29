@@ -64,7 +64,7 @@ const PaymentTable: React.FC = () => {
 
   const { data: result, isFetching } = useGetUserBookingQuery({
     paymentStatus: ["pending", "cancelled"],
-    status: ["approved"],
+    status: ["completed"],
     page,
     limit,
   });

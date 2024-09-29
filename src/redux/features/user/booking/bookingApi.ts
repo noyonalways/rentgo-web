@@ -1,21 +1,8 @@
 import { baseApi } from "@/redux/api/baseApi";
 import { TBooking, TResponse, TResponseRedux, TUpdateBooking } from "@/types";
+import { toURLSearchParams } from "@/utils";
 
 // Helper function to convert params object to URLSearchParams
-const toURLSearchParams = (params: Record<string, unknown>) => {
-  const searchParams = new URLSearchParams();
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      if (Array.isArray(value)) {
-        // Handle arrays by appending multiple entries for the same key
-        value.forEach((item) => searchParams.append(key, String(item)));
-      } else {
-        searchParams.append(key, String(value));
-      }
-    }
-  });
-  return searchParams;
-};
 
 const bookingApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -46,7 +33,7 @@ const bookingApi = baseApi.injectEndpoints({
     }),
 
     // cancel a booking
-    cancelBooking: builder.mutation<TResponse<TBooking>, string>({
+    cancelLoggedInUserBooking: builder.mutation<TResponse<TBooking>, string>({
       query: (bookingId) => ({
         url: `/bookings/my-bookings/${bookingId}`,
         method: "DELETE",
@@ -72,6 +59,6 @@ const bookingApi = baseApi.injectEndpoints({
 export const {
   useGetUserBookingQuery,
   useGetBookingByTransactionIdQuery,
-  useCancelBookingMutation,
+  useCancelLoggedInUserBookingMutation,
   useUpdateBookingMutation,
 } = bookingApi;

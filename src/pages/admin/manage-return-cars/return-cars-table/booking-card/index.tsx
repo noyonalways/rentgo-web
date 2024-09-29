@@ -15,69 +15,138 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { hours } from "@/constants";
+import { useReturnCarMutation } from "@/redux/features/car/carApi";
+import { returnCarSchema } from "@/schemas";
+import { TBooking, TError } from "@/types";
+import { formatDateToYYYYMMDD } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
-interface Booking {
-  userName: string;
-  carName: string;
-  date: string;
-  startTime: string;
-  status: string;
-}
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon, ChevronDown } from "lucide-react";
 
-interface IProps {
-  booking: Booking;
-}
+interface IProps extends TBooking {}
 
-const returnCarSchema = z.object({
-  endTime: z.string({
-    required_error: "End time is required",
-  }),
-});
-
-const BookingCard: React.FC<IProps> = ({ booking }) => {
+const BookingCard: React.FC<IProps> = ({
+  startTime,
+  bookingDate,
+  user,
+  car,
+  status,
+  _id,
+}) => {
   const form = useForm<z.infer<typeof returnCarSchema>>({
     resolver: zodResolver(returnCarSchema),
   });
 
-  const onSubmit = (data: z.infer<typeof returnCarSchema>) => {
-    console.log("Form data:", {
-      endTime: data.endTime,
-      carName: booking.carName,
-    });
+  const [returnCar] = useReturnCarMutation();
 
-    // Reset the form after submission
+  const onSubmit = async (data: z.infer<typeof returnCarSchema>) => {
+    const returnData = {
+      bookingId: _id,
+      returnDate: formatDateToYYYYMMDD(data.returnDate),
+      endTime: data.endTime,
+    };
+
+    // console.log(returnData);
+
+    try {
+      // api call
+      const res = await returnCar(returnData).unwrap();
+      console.log(res);
+      if (res.success) {
+        toast.success(res?.message, {
+          position: "top-right",
+          duration: 2000,
+        });
+      }
+    } catch (err) {
+      const error = err as TError;
+      toast.error(error.data.message || "Something went wrong", {
+        position: "top-right",
+        duration: 2000,
+      });
+    }
+
     form.reset();
   };
-
-  // Reset the select value when form is reset
-  useEffect(() => {
-    if (form.formState.isSubmitSuccessful) {
-      form.reset({ endTime: "" }); // Reset the endTime field explicitly
-    }
-  }, [form]);
 
   return (
     <Card className="mb-4 shadow-md">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">
-          {booking.carName}
-        </CardTitle>
+        <CardTitle className="text-xl font-semibold">{car.name}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-2 mb-4">
           <div className="text-sm font-medium">User Name:</div>
-          <div className="text-sm">{booking.userName}</div>
-          <div className="text-sm font-medium">Date:</div>
-          <div className="text-sm">{booking.date}</div>
+          <div className="text-sm">{user.name}</div>
+          <div className="text-sm font-medium">Booking Date:</div>
+          <div className="text-sm">{new Date(bookingDate).toDateString()}</div>
           <div className="text-sm font-medium">Start Time:</div>
-          <div className="text-sm">{booking.startTime}</div>
+          <div className="text-sm">{startTime}</div>
           <div className="text-sm font-medium">Status:</div>
-          <div className="text-sm">{booking.status}</div>
+          <div className="text-sm">{status}</div>
         </div>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              name="returnDate"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex flex-col mb-4">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "pl-3 text-left font-normal px-4 py-5",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <div className="flex items-center space-x-2">
+                              <span>Select Date</span>
+                              <ChevronDown
+                                className="text-gray-400 dark:text-muted-foreground"
+                                size={20}
+                              />
+                            </div>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0" align="end">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date < new Date(new Date().setHours(0, 0, 0, 0))
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
 
         <Form {...form}>
           <form className="space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
@@ -85,7 +154,7 @@ const BookingCard: React.FC<IProps> = ({ booking }) => {
               name="endTime"
               control={form.control}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="mb-2">
                   <Select
                     onValueChange={field.onChange}
                     value={field.value ?? ""} // Control the select value
@@ -109,10 +178,11 @@ const BookingCard: React.FC<IProps> = ({ booking }) => {
             />
 
             <Button
+              disabled={status !== "approved"}
               variant="default"
               className="w-full"
               size="lg"
-              type="submit" // Add type="submit" for button
+              type="submit"
             >
               Return
             </Button>

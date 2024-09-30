@@ -36,6 +36,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface IProps {}
 
@@ -46,7 +47,18 @@ const searchCarSchema = z.object({
 });
 
 const Cars: React.FC<IProps> = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const queryParams = new URLSearchParams(location.search);
+  const search = queryParams.get("searchTerm");
+  const carType = queryParams.get("type");
+  const color = queryParams.get("color");
+  const isElectric = queryParams.get("isElectric");
+
+  const [electric, setElectric] = useState(isElectric);
+  const [searchTerm, setSearchTerm] = useState(search);
+  const [type, setType] = useState(carType);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedCapacities, setSelectedCapacities] = useState<number[]>([]);
@@ -63,6 +75,9 @@ const Cars: React.FC<IProps> = () => {
     limit: resultLimit,
     sort: sortBy,
     page: currentPage,
+    type: type || undefined,
+    isElectric: electric || undefined,
+    color: color || undefined,
   });
   const cars = data?.data;
   const { totalPages } = data?.meta ?? {};
@@ -130,6 +145,9 @@ const Cars: React.FC<IProps> = () => {
   const handleClearFilters = () => {
     form.reset();
 
+    navigate(location.pathname);
+    setElectric("");
+    setType("");
     setSearchTerm("");
     setSelectedCategories([]);
     setSelectedBrands([]);
@@ -219,28 +237,6 @@ const Cars: React.FC<IProps> = () => {
                 </div>
               </div> */}
 
-              {/* category */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Category</h3>
-                <div className="space-y-4">
-                  {carCategories.map((category) => (
-                    <div key={category} className="flex items-center">
-                      <Checkbox
-                        id={category}
-                        checked={selectedCategories.includes(category)}
-                        onCheckedChange={() => handleCategoryChange(category)}
-                      />
-                      <Label
-                        htmlFor={category}
-                        className="ml-2 text-sm font-medium cursor-pointer"
-                      >
-                        {category}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {/* brand */}
               <div>
                 <h3 className="text-lg font-semibold mb-4">Brand</h3>
@@ -257,6 +253,28 @@ const Cars: React.FC<IProps> = () => {
                         className="ml-2 text-sm font-medium cursor-pointer"
                       >
                         {brand}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* category */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Category</h3>
+                <div className="space-y-4">
+                  {carCategories.map((category) => (
+                    <div key={category} className="flex items-center">
+                      <Checkbox
+                        id={category}
+                        checked={selectedCategories.includes(category)}
+                        onCheckedChange={() => handleCategoryChange(category)}
+                      />
+                      <Label
+                        htmlFor={category}
+                        className="ml-2 text-sm font-medium cursor-pointer"
+                      >
+                        {category}
                       </Label>
                     </div>
                   ))}

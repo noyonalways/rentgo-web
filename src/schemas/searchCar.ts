@@ -1,20 +1,28 @@
 import { z } from "zod";
 
 export const searchCarFormSchema = z.object({
-  carName: z.preprocess(
-    (val) => (val === undefined ? "" : val),
-    z.string().min(1, "Car Name is required")
-  ),
-  carType: z.preprocess(
-    (val) => (val === undefined ? "" : val),
-    z.string().optional()
-  ),
-  seatCapacity: z.preprocess(
-    (val) => (val === undefined ? "" : val),
-    z.string().optional()
-  ),
-  isElectric: z.preprocess(
-    (val) => (val === undefined ? false : val),
-    z.boolean().optional()
-  ),
+  carName: z
+    .string({
+      required_error: "Car name is required",
+      invalid_type_error: "Car name must string",
+    })
+    .optional(),
+  type: z
+    .string({
+      required_error: "Car type is required",
+      invalid_type_error: "Car type must string",
+    })
+    .optional(),
+  color: z
+    .string({
+      required_error: "Car brand is required",
+      invalid_type_error: "Car brand must string",
+    })
+    .optional(),
+  isElectric: z
+    .boolean({
+      required_error: "Electric is required",
+      invalid_type_error: "Electric must boolean",
+    })
+    .optional(),
 });

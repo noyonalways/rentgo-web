@@ -13,24 +13,38 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { carColors, carTypes } from "@/constants";
 import { searchCarFormSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDown, Search } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 interface IProps {}
 
 const Hero: React.FC<IProps> = () => {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof searchCarFormSchema>>({
     resolver: zodResolver(searchCarFormSchema),
   });
 
   const onSubmit = (data: z.infer<typeof searchCarFormSchema>) => {
-    console.log("Form Data:", data);
+    if (data.carName && data.color && data.type && data.isElectric) {
+      navigate(
+        `/cars?searchTerm=${data.carName}&type=${data.type}&color=${data.color}&isElectric=${data.isElectric}`
+      );
+    } else {
+      navigate(`/cars`);
+    }
 
-    // Reset the form after submission
     form.reset();
   };
 
@@ -68,7 +82,7 @@ const Hero: React.FC<IProps> = () => {
                     <Input
                       className="px-4 py-5"
                       type="text"
-                      placeholder="Car Name"
+                      placeholder="Search "
                       {...field}
                       value={field.value ?? ""}
                     />
@@ -80,39 +94,54 @@ const Hero: React.FC<IProps> = () => {
 
             {/* Car Type Field */}
             <FormField
-              name="carType"
+              name="type"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormControl>
-                    <Input
-                      className="px-4 py-5"
-                      type="text"
-                      placeholder="Car Type"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? ""}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="px-4 py-5 text-muted-foreground">
+                        <SelectValue placeholder="Car type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {carTypes.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* Seat Capacity Field */}
             <FormField
-              name="seatCapacity"
+              name="color"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormControl>
-                    <Input
-                      className="px-4 py-5"
-                      type="text"
-                      placeholder="Seat Capacity"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? ""}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="px-4 py-5 text-muted-foreground">
+                        <SelectValue placeholder="Select car color" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {carColors.map((brand) => (
+                        <SelectItem key={brand} value={brand}>
+                          {brand}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

@@ -37,15 +37,6 @@ const SignUp: React.FC<IProps> = () => {
 
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
-    defaultValues: {
-      name: "Noyon Rahman",
-      email: "noyonrahman2003@gmail.com",
-      phone: "+8801706592962",
-      password: "12345678P",
-      confirmPassword: "12345678P",
-      address: "Kapasia, Gazipur",
-      terms: true,
-    },
   });
 
   const onSubmit = async (data: z.infer<typeof signUpFormSchema>) => {

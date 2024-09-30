@@ -18,22 +18,51 @@ import { cn } from "@/lib/utils";
 import { useSignupMutation } from "@/redux/features/auth/authApi";
 import { signUpFormSchema } from "@/schemas";
 import { TError } from "@/types";
+import { supabase } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { Label } from "recharts";
 import { toast } from "sonner";
+import { uid } from "uid";
 import { z } from "zod";
 
 interface IProps {}
 
 const SignUp: React.FC<IProps> = () => {
   const [isPassword, setIsPassword] = useState(true);
-  const [signUp] = useSignupMutation();
+  const [profileImage, setProfileImage] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
 
+  const [signUp] = useSignupMutation();
   const navigate = useNavigate();
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploadingImage(true);
+      const result = await supabase.storage
+        .from("profile-images")
+        .upload("public/" + uid(12) + "-" + file.name, file);
+
+      if (result) {
+        const res = supabase.storage
+          .from("profile-images")
+          .getPublicUrl(result!.data!.path);
+
+        setProfileImage(res.data.publicUrl);
+      }
+    } catch (error) {
+      console.error("Failed to upload image", error);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
@@ -41,8 +70,10 @@ const SignUp: React.FC<IProps> = () => {
 
   const onSubmit = async (data: z.infer<typeof signUpFormSchema>) => {
     // Destructure confirmPassword and terms out of data and exclude them
+    data.profileImage = profileImage;
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { confirmPassword, terms, profileImage, ...filteredData } = data;
+    const { confirmPassword, terms, ...filteredData } = data;
     const toastId = toast.loading("Creating User...", {
       duration: 2000,
       position: "top-right",
@@ -88,24 +119,18 @@ const SignUp: React.FC<IProps> = () => {
         <div className="w-full lg:max-w-lg mx-auto">
           <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-              <FormField
-                name="profileImage"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      {/* Handle file uploads */}
-                      <Input
-                        className="block pt-2 pb-8"
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => field.onChange(e.target.files?.[0])} // Handle file input
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div>
+                <Label>Profile Image</Label>
+                <Input
+                  id="profileImage"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="col-span-3"
+                  disabled={uploadingImage}
+                />
+                {uploadingImage && <small>Uploading image...</small>}
+              </div>
 
               <FormField
                 name="name"

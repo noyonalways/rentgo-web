@@ -7,8 +7,11 @@ const checkStrongPassword = (input: string) => {
 export const signUpFormSchema = z
   .object({
     profileImage: z
-      .instanceof(File) // Ensure the file is an instance of the File object
-      .optional(), // The file upload can be optional
+      .string({
+        required_error: "Profile image is required",
+        invalid_type_error: "Profile image must be string",
+      })
+      .optional(),
     name: z.string({
       required_error: "Name is required",
       invalid_type_error: "Name must be string",

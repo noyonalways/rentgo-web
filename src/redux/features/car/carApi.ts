@@ -39,6 +39,20 @@ const carApi = baseApi.injectEndpoints({
       invalidatesTags: ["allCars"],
     }),
 
+    // update a car
+    updateCar: builder.mutation<
+      TResponse<TCar>,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { carId: string; payload: any }
+    >({
+      query: ({ carId, payload }) => ({
+        url: `/cars/${carId}`,
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: ["allCars"],
+    }),
+
     // delete a car
     deleteCar: builder.mutation<TResponse<TCar>, string>({
       query: (carId) => ({
@@ -66,4 +80,5 @@ export const {
   useAddNewCarMutation,
   useGetSingleCarQuery,
   useDeleteCarMutation,
+  useUpdateCarMutation,
 } = carApi;

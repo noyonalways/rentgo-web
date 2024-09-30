@@ -40,25 +40,28 @@ import {
   seatCapacities,
   transmissions,
 } from "@/constants";
-import { useAddNewCarMutation } from "@/redux/features/car/carApi";
-import { addNewCarSchema } from "@/schemas";
+import { useUpdateCarMutation } from "@/redux/features/car/carApi";
+import { updateCarSchema } from "@/schemas";
 import { TError } from "@/types";
 import { supabase } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CirclePlus } from "lucide-react";
+import { Edit } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { uid } from "uid";
 import { z } from "zod";
 
-interface IProps {}
+interface IProps {
+  id: string;
+  status: string;
+}
 
-const AddNewCarModal: React.FC<IProps> = () => {
+const UpdateCarModal: React.FC<IProps> = ({ id, status }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [image, setImage] = useState("");
   const [galleryImages, setGalleryImages] = useState<{ url: string }[]>([]);
-  const [addNewCar] = useAddNewCarMutation();
+  const [updateCar] = useUpdateCarMutation();
 
   const handleGalleryImages = async (
     e: React.ChangeEvent<HTMLInputElement>
@@ -110,23 +113,38 @@ const AddNewCarModal: React.FC<IProps> = () => {
     }
   };
 
-  const form = useForm<z.infer<typeof addNewCarSchema>>({
-    resolver: zodResolver(addNewCarSchema),
+  const form = useForm<z.infer<typeof updateCarSchema>>({
+    resolver: zodResolver(updateCarSchema),
   });
 
-  const onSubmit = async (data: z.infer<typeof addNewCarSchema>) => {
-    const tostId = toast.loading("Adding new car...", {
+  const onSubmit = async (data: z.infer<typeof updateCarSchema>) => {
+    const tostId = toast.loading("Updating the car...", {
       duration: 2000,
       position: "top-right",
     });
-    const newCarData = {
+
+    const newData = {
       ...data,
       image,
       galleryImages,
     };
 
+    // Filter out empty strings, empty arrays, or undefined fields
+    const filteredData = Object.fromEntries(
+      Object.entries(newData).filter(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ([_key, value]) =>
+          value !== "" &&
+          value !== undefined &&
+          (!Array.isArray(value) || value.length > 0)
+      )
+    );
+
     try {
-      const res = await addNewCar(newCarData).unwrap();
+      const res = await updateCar({
+        carId: id,
+        payload: filteredData,
+      }).unwrap();
       if (res.success) {
         toast.success(res?.message, {
           id: tostId,
@@ -151,28 +169,21 @@ const AddNewCarModal: React.FC<IProps> = () => {
     form.reset();
   };
 
-  // Reset the select value when form is reset
-  // useEffect(() => {
-  //   if (form.formState.isSubmitSuccessful) {
-  //     form.reset({ startTime: "" }); // Reset the endTime field explicitly
-  //   }
-  // }, [form]);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          title="Add New Car"
-          size={"sm"}
-          className="absolute right-0 top-0 space-x-2"
+          disabled={status === "Unavailable"}
+          variant="outline"
+          size="icon"
+          className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
         >
-          <CirclePlus size={20} />
-          <span>Add New</span>
+          <Edit size={16} />
         </Button>
       </DialogTrigger>
       <DialogContent className="w-full max-w-5xl h-auto max-h-[92vh] overflow-y-auto px-8 lg:px-6">
         <DialogHeader>
-          <DialogTitle>Add a new car</DialogTitle>
+          <DialogTitle>Update the car</DialogTitle>
           <DialogDescription>
             Make make sure to upload the images file first.
           </DialogDescription>
@@ -631,7 +642,7 @@ const AddNewCarModal: React.FC<IProps> = () => {
 
           <DialogFooter>
             <Button onClick={() => form.handleSubmit(onSubmit)()} type="submit">
-              Add Car
+              Update Car
             </Button>
           </DialogFooter>
         </Form>
@@ -640,4 +651,4 @@ const AddNewCarModal: React.FC<IProps> = () => {
   );
 };
 
-export default AddNewCarModal;
+export default UpdateCarModal;

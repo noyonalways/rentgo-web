@@ -7,6 +7,9 @@ export const carBrands = [
   "Ford",
   "BMW",
   "Mercedes-Benz",
+  "Hyundai",
+  "Volvo",
+  "Nissan",
 ];
 
 // Car Types

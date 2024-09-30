@@ -39,19 +39,19 @@ export const carColors = ["Silver", "White", "Blue", "Black", "Red", "Gray"];
 export const seatCapacities = [4, 5, 6, 7];
 
 // Mileage
-export const mileages = [28, 32, 30, 33, 20, 24, 25, 22, 26];
+export const mileages = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 // Mileage Units
 export const mileageUnits = ["kilometers", "miles"];
 
 // Price Per Hour
-export const pricesPerHour = [12, 13, 14, 15, 18, 20, 28, 30, 32, 35];
+export const pricesPerHour = [40, 50, 60, 80, 100, 120, 150, 200];
 
 // Transmission Types
 export const transmissions = ["automatic", "manual"];
 
 // Manufacturing Years
-export const carReleaseYears = ["2021", "2022", "2023"];
+export const carReleaseYears = ["2020", "2021", "2022", "2023", "2024"];
 
 export const carFeatures = [
   "Air Conditioning",

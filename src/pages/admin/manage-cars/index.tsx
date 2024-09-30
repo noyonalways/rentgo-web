@@ -1,5 +1,5 @@
 import DashboardSectionTitle from "@/components/dashboard-section-title";
-import AddNewCar from "./add-new-car-modal";
+import AddNewCarModal from "./add-new-car-modal";
 import CarsTable from "./cars-table";
 
 interface IProps {}
@@ -11,7 +11,7 @@ const ManageCars: React.FC<IProps> = () => {
         <DashboardSectionTitle title="Manage Cars" />
 
         {/* add new car modal */}
-        <AddNewCar />
+        <AddNewCarModal />
       </div>
       <CarsTable />
     </div>

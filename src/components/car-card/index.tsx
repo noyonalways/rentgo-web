@@ -13,11 +13,12 @@ const CarCard: React.FC<IProps> = ({
   pricePerHour,
   transmission,
   _id,
+  status,
 }) => {
   return (
     <div className="border p-4 rounded-xl relative">
       <h2 className="text-lg font-semibold">{name}</h2>
-      <figure className="p-4 mb-2 h-56">
+      <figure className="p-4 mb-2 h-60">
         <img
           className="w-full object-contain max-h-56"
           src={
@@ -44,13 +45,22 @@ const CarCard: React.FC<IProps> = ({
           <span>/hr</span>
         </div>
       </div>
-      <div className="absolute left-0 top-0 w-full bg-primary/90 h-full rounded-xl flex items-center justify-center opacity-0 hover:opacity-100 duration-200 transition-all cursor-pointer">
-        <Link to={`/cars/${_id}`}>
-          <Button className="border dark:hover:border-primary border-white bg-transparent hover:bg-background hover:text-primary active:scale-95 duration-200">
-            View Details
-          </Button>
-        </Link>
-      </div>
+      {status === "unavailable" && (
+        <div className="absolute left-0 top-0 w-full bg-muted/90 h-full rounded-xl flex items-center justify-center duration-200 transition-all cursor-pointer">
+          <p className="p-4 text-center bg-primary w-full text-white">
+            Unavailable
+          </p>
+        </div>
+      )}
+      {status === "available" && (
+        <div className="absolute left-0 top-0 w-full bg-primary/90 h-full rounded-xl flex items-center justify-center opacity-0 hover:opacity-100 duration-200 transition-all cursor-pointer">
+          <Link to={`/cars/${_id}`}>
+            <Button className="border dark:hover:border-primary border-white bg-transparent hover:bg-background hover:text-primary active:scale-95 duration-200">
+              View Details
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

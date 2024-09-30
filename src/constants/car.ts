@@ -1,6 +1,7 @@
 // Car Brands
 export const carBrands = [
   "Audi",
+  "Tesla",
   "Toyota",
   "Honda",
   "Ford",

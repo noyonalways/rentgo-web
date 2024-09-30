@@ -54,7 +54,9 @@ const ProfileAvatar: React.FC<IProps> = ({
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Link className="w-full" to="/me">
-            Profile
+            <Button variant={"outline"} className="w-full">
+              Profile
+            </Button>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>

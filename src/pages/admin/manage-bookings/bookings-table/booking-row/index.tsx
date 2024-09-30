@@ -1,53 +1,31 @@
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { CheckCircle, XCircle } from "lucide-react";
+import { TBooking } from "@/types";
+import ApproveBookingModal from "../approve-booking-modal";
+import CancelBookingModal from "../cancel-booking-modal";
 
-interface Booking {
-  userName: string;
-  carName: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  status: string;
-}
+interface IProps extends TBooking {}
 
-interface IProps {
-  booking: Booking;
-  onEdit: () => void;
-  onCancel: () => void;
-}
-
-const BookingRow: React.FC<IProps> = ({ booking, onEdit, onCancel }) => {
+const BookingRow: React.FC<IProps> = ({
+  _id,
+  car,
+  bookingDate,
+  startTime,
+  endTime,
+  status,
+  user,
+}) => {
   return (
     <TableRow>
-      <TableCell>{booking.userName}</TableCell>
-      <TableCell>{booking.carName}</TableCell>
-      <TableCell>{booking.date}</TableCell>
-      <TableCell>{booking.startTime}</TableCell>
-      <TableCell>{booking.endTime}</TableCell>
-      <TableCell>{booking.status}</TableCell>
+      <TableCell>{user.name}</TableCell>
+      <TableCell>{car.name}</TableCell>
+      <TableCell>{new Date(bookingDate).toDateString()}</TableCell>
+      <TableCell>{startTime}</TableCell>
+      <TableCell>{endTime ? endTime : "N/A"}</TableCell>
+      <TableCell>{status}</TableCell>
       <TableCell>
         <div className="flex space-x-2">
-          <Button
-            title="Cancel Booking"
-            disabled={booking.status === "Unavailable"}
-            variant="outline"
-            size="icon"
-            className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-            onClick={onCancel}
-          >
-            <XCircle size={20} />
-          </Button>
-          <Button
-            title="Approve Booking"
-            disabled={booking.status === "Approved"}
-            variant="outline"
-            size="icon"
-            className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-            onClick={onEdit}
-          >
-            <CheckCircle size={16} />
-          </Button>
+          <CancelBookingModal id={_id} status={status} />
+          <ApproveBookingModal id={_id} status={status} />
         </div>
       </TableCell>
     </TableRow>

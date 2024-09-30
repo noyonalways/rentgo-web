@@ -1,3 +1,4 @@
+import BouncingLoader from "@/components/loader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetMeQuery } from "@/redux/features/auth/authApi";
+import { useGetUserBookingQuery } from "@/redux/features/user/booking/bookingApi";
 import { CalendarDays, Car, Info, Mail, MapPin, Phone } from "lucide-react";
 import UpdateProfileModal from "./update-profile-modal";
 
@@ -28,6 +30,12 @@ const UserProfile = () => {
     nidOrPassport,
     role,
   } = currentUser?.data || {};
+
+  const { data: result, isFetching: isBookingFetching } =
+    useGetUserBookingQuery({
+      paymentStatus: ["paid"],
+    });
+
   return (
     <section className="pt-10 pb-20">
       <div className="container">
@@ -105,65 +113,77 @@ const UserProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Rental History</h3>
-              <div className="space-y-3">
-                {[
-                  {
-                    date: "May 15, 2023",
-                    car: "Tesla Model 3",
-                    location: "San Francisco Airport",
-                  },
-                  {
-                    date: "Apr 2, 2023",
-                    car: "BMW X5",
-                    location: "Los Angeles Downtown",
-                  },
-                  {
-                    date: "Mar 10, 2023",
-                    car: "Toyota Camry",
-                    location: "Seattle Airport",
-                  },
-                ].map((booking, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-muted dark:bg-primary/5 rounded-lg"
-                  >
-                    <div>
-                      <div className="font-semibold">{booking.car}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {booking.location}
-                      </div>
-                    </div>
-                    <div className="text-sm text-muted-foreground mt-2 sm:mt-0">
-                      {booking.date}
-                    </div>
-                  </div>
-                ))}
+            {result?.data?.length === 0 ? (
+              <div>
+                <p>No Rental history found</p>
               </div>
-            </div>
+            ) : (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Rental History</h3>
+                {isBookingFetching ? (
+                  <div className="flex justify-center items-center">
+                    <BouncingLoader />
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {result?.data?.map((booking, index) => (
+                      <div
+                        key={index}
+                        className="flex items-end justify-between p-4 bg-muted dark:bg-primary/5 rounded-lg"
+                      >
+                        <div className="space-y-1">
+                          <div className="font-semibold">
+                            {booking?.car?.name}
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            {booking?.bookingAddress}
+                          </div>
+                        </div>
+                        <div className="text-sm text-muted-foreground mt-2 sm:mt-0">
+                          {new Date(booking?.bookingDate)?.toDateString()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Rental Statistics</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
                 {[
-                  { label: "Total Rentals", value: "47", icon: Car },
+                  {
+                    label: "Total Rentals",
+                    value: result?.data?.length || "N/A",
+                    icon: Car,
+                  },
                   {
                     label: "Most Frequent Location",
-                    value: "SFO",
+                    value:
+                      result?.data?.[result?.data?.length - 1]
+                        ?.bookingAddress || "N/A",
                     icon: MapPin,
                   },
                   {
                     label: "Last Rental Date",
-                    value: "May 15, 2023",
+                    value: result?.data?.[0]?.bookingDate
+                      ? new Date(
+                          result.data[result?.data?.length - 1].bookingDate
+                        ).toDateString()
+                      : "N/A",
+
                     icon: CalendarDays,
                   },
                 ].map((stat) => (
                   <div
                     key={stat.label}
-                    className="bg-muted dark:bg-primary/5 rounded-lg p-3"
+                    className="bg-muted dark:bg-primary/5 gird items-center content-center justify-center p-4 rounded-lg"
                   >
                     <stat.icon className="size-8 mx-auto mb-2 text-primary" />
-                    <div className="text-2xl font-bold">{stat.value}</div>
+                    <div className="text-lg lg:text-xl font-bold">
+                      {stat?.value}
+                    </div>
                     <div className="text-sm text-muted-foreground">
                       {stat.label}
                     </div>

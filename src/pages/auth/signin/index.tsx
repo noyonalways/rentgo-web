@@ -54,7 +54,7 @@ const SignIn: React.FC<IProps> = () => {
       }
     } catch (err) {
       const error = err as TError;
-      toast.error(error?.data?.message, {
+      toast.error(error?.data?.message || "Something went wrong", {
         id: toastId,
         position: "top-right",
       });

@@ -4,11 +4,16 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { useGetAllCarsQuery } from "@/redux/features/car/carApi";
 import Autoplay from "embla-carousel-autoplay";
 
 interface IProps {}
 
 const FeaturedCars: React.FC<IProps> = () => {
+  const { data } = useGetAllCarsQuery(undefined);
+
+  const cars = data?.data;
+
   return (
     <section className="py-20">
       <div className="container">
@@ -30,14 +35,12 @@ const FeaturedCars: React.FC<IProps> = () => {
           }}
         >
           <CarouselContent>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <CarouselItem key={index} className="basis-full lg:basis-1/4">
-                <CarCard />
+            {cars?.map((car) => (
+              <CarouselItem key={car._id} className="basis-full lg:basis-1/4">
+                <CarCard {...car} />
               </CarouselItem>
             ))}
           </CarouselContent>
-          {/* <CarouselPrevious />
-          <CarouselNext /> */}
         </Carousel>
       </div>
     </section>

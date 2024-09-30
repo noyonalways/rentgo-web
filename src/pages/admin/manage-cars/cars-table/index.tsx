@@ -1,3 +1,4 @@
+import BouncingLoader from "@/components/loader";
 import {
   Table,
   TableBody,
@@ -5,81 +6,60 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useGetAllCarsQuery } from "@/redux/features/car/carApi";
 import CarCard from "./car-card";
 import CarRow from "./car-row";
-
-interface Car {
-  carName: string;
-  model: string;
-  year: string;
-  pricePerHour: number;
-  color: string;
-  status: string;
-}
 
 interface IProps {}
 
 const CarsTable: React.FC<IProps> = () => {
-  const bookings: Car[] = [
-    {
-      carName: "Audi A6",
-      model: "AV25",
-      year: "2022",
-      pricePerHour: 400,
-      color: "White",
-      status: "Available",
-    },
-  ];
+  const { data, isFetching } = useGetAllCarsQuery(undefined);
 
-  const handleEdit = (carName: string) => {
-    console.log(`Editing booking for: ${carName}`);
-  };
-
-  const handleDelete = (carName: string) => {
-    console.log(`Deleting booking for: ${carName}`);
-  };
+  const cars = data?.data;
 
   return (
-    <div>
-      {/* Mobile view */}
-      <div className="md:hidden">
-        {bookings.map((car, index) => (
-          <CarCard
-            key={index}
-            car={car}
-            onEdit={() => handleEdit(car.carName)}
-            onDelete={() => handleDelete(car.carName)}
-          />
-        ))}
-      </div>
+    <>
+      {cars?.length === 0 ? (
+        <p className="text-center">No data found</p>
+      ) : (
+        <>
+          {isFetching ? (
+            <div>
+              <BouncingLoader />
+            </div>
+          ) : (
+            <>
+              <div className="md:hidden">
+                {cars?.map((car) => (
+                  <CarCard key={car._id} {...car} />
+                ))}
+              </div>
 
-      {/* Desktop view */}
-      <div className="hidden md:block">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Car Name</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Year</TableHead>
-              <TableHead>Price per hour</TableHead>
-              <TableHead>Color</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {bookings.map((car, index) => (
-              <CarRow
-                key={index}
-                car={car}
-                onEdit={() => handleEdit(car.carName)}
-                onDelete={() => handleDelete(car.carName)}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
+              <div className="hidden md:block">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Car Name</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Year</TableHead>
+                      <TableHead>Price per hour</TableHead>
+                      <TableHead>Color</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {cars?.map((car) => (
+                      <CarRow key={car._id} {...car} />
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </>
+          )}
+        </>
+      )}
+    </>
   );
 };
 

@@ -1,50 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Edit, Trash2 } from "lucide-react";
+import { TCar } from "@/types";
+import { Edit } from "lucide-react";
+import DeleteCarModal from "../../delete-car-modal";
 
-interface Car {
-  carName: string;
-  model: string;
-  year: string;
-  pricePerHour: number;
-  color: string;
-  status: string;
-}
+interface CarTableRowProps extends TCar {}
 
-interface CarTableRowProps {
-  car: Car;
-  onEdit: () => void;
-  onDelete: () => void;
-}
-
-const CarRow: React.FC<CarTableRowProps> = ({ car, onEdit, onDelete }) => {
+const CarRow: React.FC<CarTableRowProps> = ({
+  _id,
+  name,
+  model,
+  year,
+  pricePerHour,
+  color,
+  status,
+}) => {
   return (
     <TableRow>
-      <TableCell>{car.carName}</TableCell>
-      <TableCell>{car.model}</TableCell>
-      <TableCell>{car.year}</TableCell>
-      <TableCell>{car.pricePerHour}</TableCell>
-      <TableCell>{car.color}</TableCell>
-      <TableCell>{car.status}</TableCell>
+      <TableCell>{name}</TableCell>
+      <TableCell>{model}</TableCell>
+      <TableCell>{year}</TableCell>
+      <TableCell>{pricePerHour}</TableCell>
+      <TableCell>{color}</TableCell>
+      <TableCell>{status}</TableCell>
       <TableCell>
         <div className="flex space-x-2">
-          <Button
-            title="Delete Car"
-            disabled={car.status === "Unavailable"}
-            variant="outline"
-            size="icon"
-            className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-            onClick={onDelete}
-          >
-            <Trash2 size={20} />
-          </Button>
+          <DeleteCarModal status={status} id={_id} />
+
           <Button
             title="Edit Car"
-            disabled={car.status === "Unavailable"}
+            disabled={status === "unavailable"}
             variant="outline"
             size="icon"
             className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-            onClick={onEdit}
           >
             <Edit size={16} />
           </Button>

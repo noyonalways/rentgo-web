@@ -1,3 +1,4 @@
+import BouncingLoader from "@/components/loader";
 import {
   Table,
   TableBody,
@@ -5,107 +6,103 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  useCancelLoggedInUserBookingMutation,
+  useGetUserBookingQuery,
+} from "@/redux/features/user/booking/bookingApi";
+import { TError } from "@/types";
+import { toast } from "sonner";
 import BookingCard from "./booking-card";
 import BookingRow from "./booking-row";
-
-interface Booking {
-  carName: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  status: string;
-}
 
 interface IProps {}
 
 const AllBookings: React.FC<IProps> = () => {
-  const bookings: Booking[] = [
-    {
-      carName: "Range Rover",
-      date: "22/09/2024",
-      startTime: "10:00 AM",
-      endTime: "N/A",
-      status: "Pending",
-    },
-    // Add more bookings here for demonstration
-    {
-      carName: "Tesla Model 3",
-      date: "23/09/2024",
-      startTime: "2:00 PM",
-      endTime: "N/A",
-      status: "Approved",
-    },
-    {
-      carName: "BMW X5",
-      date: "24/09/2024",
-      startTime: "9:00 AM",
-      endTime: "N/A",
-      status: "Pending",
-    },
-    {
-      carName: "BMW X5",
-      date: "24/09/2024",
-      startTime: "9:00 AM",
-      endTime: "N/A",
-      status: "Pending",
-    },
-    {
-      carName: "BMW X5",
-      date: "24/09/2024",
-      startTime: "9:00 AM",
-      endTime: "N/A",
-      status: "Pending",
-    },
-  ];
+  const { data: result, isFetching: isBookingFetching } =
+    useGetUserBookingQuery({
+      status: ["pending", "approved", "completed", "cancelled"],
+    });
 
-  const handleEdit = (carName: string) => {
-    console.log(`Editing booking for: ${carName}`);
-  };
+  const bookings = result?.data;
 
-  const handleDelete = (carName: string) => {
-    console.log(`Deleting booking for: ${carName}`);
+  const [cancelBooking] = useCancelLoggedInUserBookingMutation();
+
+  const handleCancel = async (bookingId: string) => {
+    const toastId = toast.loading("Canceling the Booking...", {
+      duration: 2000,
+      position: "top-right",
+    });
+
+    try {
+      const response = await cancelBooking(bookingId).unwrap();
+      if (response.success) {
+        toast.success(response.message, {
+          id: toastId,
+          duration: 2000,
+          position: "top-right",
+        });
+      }
+    } catch (err) {
+      const error = err as TError;
+      toast.error(error?.data?.message || "Something went wrong", {
+        id: toastId,
+        position: "top-right",
+      });
+    }
   };
 
   return (
-    <div>
+    <>
       {/* Mobile view */}
       <div className="md:hidden">
-        {bookings.map((booking, index) => (
-          <BookingCard
-            key={index}
-            booking={booking}
-            onEdit={() => handleEdit(booking.carName)}
-            onDelete={() => handleDelete(booking.carName)}
-          />
-        ))}
+        {isBookingFetching ? (
+          <BouncingLoader />
+        ) : bookings && bookings.length > 0 ? (
+          bookings.map((booking) => (
+            <BookingCard
+              key={booking._id}
+              booking={booking}
+              onCancel={() => handleCancel(booking._id)}
+            />
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No bookings available</p>
+        )}
       </div>
 
       {/* Desktop view */}
-      <div className="hidden md:block">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Car Name</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Start Time</TableHead>
-              <TableHead>End Time</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {bookings.map((booking, index) => (
-              <BookingRow
-                key={index}
-                booking={booking}
-                onEdit={() => handleEdit(booking.carName)}
-                onDelete={() => handleDelete(booking.carName)}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
+      {isBookingFetching ? (
+        <BouncingLoader />
+      ) : bookings && bookings.length > 0 ? (
+        <div className="hidden md:block">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Car Name</TableHead>
+                <TableHead>Booking Date</TableHead>
+                <TableHead>Start Time</TableHead>
+                <TableHead>End Time</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {bookings.map((booking) => (
+                <BookingRow
+                  key={booking._id}
+                  booking={booking}
+                  onCancel={() => handleCancel(booking._id)}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      ) : (
+        <div className="hidden md:block text-center text-gray-500">
+          No bookings available
+        </div>
+      )}
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import ProfileAvatar from "@/components/profile-avatar";
 import { Button } from "@/components/ui/button";
+import { useGetMeQuery } from "@/redux/features/auth/authApi";
 import { selectCurrentToken } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { verifyToken } from "@/utils";
@@ -8,6 +9,7 @@ import {
   Car,
   CarFront,
   CreditCard,
+  Edit,
   History,
   Home,
   LayoutDashboard,
@@ -28,6 +30,8 @@ const Sidebar: React.FC<IProps> = () => {
 
   const user = verifyToken(token as string) as { role: "user" | "admin" };
   const role: "user" | "admin" = user.role;
+
+  const { data: currentUser } = useGetMeQuery(undefined);
 
   const userLinks = (
     <>
@@ -50,7 +54,7 @@ const Sidebar: React.FC<IProps> = () => {
             size={"lg"}
             className="flex items-center justify-start space-x-2 w-full"
           >
-            <History size={16} />
+            <Edit size={16} />
             <span>Booking Management</span>
           </Button>
         </Link>
@@ -64,6 +68,18 @@ const Sidebar: React.FC<IProps> = () => {
           >
             <CreditCard size={16} />
             <span>Payment Management</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link className="block w-full" to={"/user/payments-history"}>
+          <Button
+            variant="secondary"
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <History size={16} />
+            <span>Payments History</span>
           </Button>
         </Link>
       </li>
@@ -132,6 +148,18 @@ const Sidebar: React.FC<IProps> = () => {
           </Button>
         </Link>
       </li>
+      <li>
+        <Link className="block w-full" to={"/admin/all-payments"}>
+          <Button
+            variant="secondary"
+            size={"lg"}
+            className="flex items-center justify-start space-x-2 w-full"
+          >
+            <CreditCard size={16} />
+            <span>All Payments</span>
+          </Button>
+        </Link>
+      </li>
     </>
   );
 
@@ -144,7 +172,12 @@ const Sidebar: React.FC<IProps> = () => {
           <span className="text-2xl font-semibold">RentGo</span>
         </Link>
         <div className="lg:hidden ml-1">
-          <ProfileAvatar size="10" align="start" />
+          <ProfileAvatar
+            size="10"
+            align="start"
+            profileImage={currentUser?.data?.profileImage}
+            name={currentUser?.data?.name}
+          />
         </div>
 
         <div className="flex items-center space-x-2">

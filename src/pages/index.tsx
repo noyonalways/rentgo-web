@@ -9,11 +9,17 @@ export { default as UserProfile } from "./user-profile";
 export { SignIn, SignUp } from "./auth";
 
 // user pages
-export { ManagePayments, ManageUserBookings, UserOverview } from "./user";
+export {
+  ManagePayments,
+  ManageUserBookings,
+  PaymentsHistory,
+  UserOverview,
+} from "./user";
 
 // admin pages
 export {
   AdminOverview,
+  AllPayments,
   ManageAllBookings,
   ManageCars,
   ManageReturnCars,

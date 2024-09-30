@@ -1,79 +1,40 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, XCircle } from "lucide-react";
+import { TBooking } from "@/types";
+import ApproveBookingModal from "../approve-booking-modal";
+import CancelBookingModal from "../cancel-booking-modal";
 
-interface Booking {
-  userName: string;
-  carName: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  status: string;
-}
+interface IProps extends TBooking {}
 
-interface IProps {
-  booking: Booking;
-  onEdit: () => void;
-  onCancel: () => void;
-}
-
-const BookingCard: React.FC<IProps> = ({ booking, onEdit, onCancel }) => {
+const BookingCard: React.FC<IProps> = ({
+  _id,
+  car,
+  bookingDate,
+  startTime,
+  endTime,
+  status,
+  user,
+}) => {
   return (
     <Card className="mb-4 shadow-md">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">
-          {booking.carName}
-        </CardTitle>
+        <CardTitle className="text-xl font-semibold">{car.name}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-2">
           <div className="text-sm font-medium">User Name:</div>
-          <div className="text-sm">{booking.userName}</div>
-          <div className="text-sm font-medium">Date:</div>
-          <div className="text-sm">{booking.date}</div>
+          <div className="text-sm">{user.name}</div>
+          <div className="text-sm font-medium">Booking Date:</div>
+          <div className="text-sm">{new Date(bookingDate).toDateString()}</div>
           <div className="text-sm font-medium">Start Time:</div>
-          <div className="text-sm">{booking.startTime}</div>
+          <div className="text-sm">{startTime}</div>
           <div className="text-sm font-medium">End Time:</div>
-          <div className="text-sm">{booking.endTime}</div>
+          <div className="text-sm">{endTime ? endTime : "N/A"}</div>
           <div className="text-sm font-medium">Status:</div>
-          <div
-            className={`text-sm ${
-              booking.status === "Approved"
-                ? "text-green-500"
-                : booking.status === "Unavailable"
-                ? "text-red-500"
-                : "text-gray-500"
-            }`}
-          >
-            {booking.status}
-          </div>
+          <div className="text-sm">{status}</div>
         </div>
-
-        {/* Action Buttons */}
         <div className="flex space-x-2 mt-4 justify-end">
-          {/* Cancel Button */}
-          <Button
-            title="Cancel Booking"
-            disabled={booking.status === "Unavailable"}
-            variant="outline"
-            size="icon"
-            className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-            onClick={onCancel}
-          >
-            <XCircle size={20} />
-          </Button>
-
-          {/* Approve Button */}
-          <Button
-            title="Approve Booking"
-            disabled={booking.status === "Approved"}
-            variant="outline"
-            size="icon"
-            className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"
-            onClick={onEdit}
-          >
-            <CheckCircle size={16} />
-          </Button>
+          <CancelBookingModal id={_id} status={status} />
+          <ApproveBookingModal id={_id} status={status} />
         </div>
       </CardContent>
     </Card>

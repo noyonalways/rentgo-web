@@ -1,3 +1,4 @@
+export { default as AllPayments } from "./all-payments";
 export { default as ManageAllBookings } from "./manage-bookings";
 export { default as ManageCars } from "./manage-cars";
 export { default as ManageReturnCars } from "./manage-return-cars";

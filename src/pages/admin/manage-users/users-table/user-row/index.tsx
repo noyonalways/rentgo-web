@@ -1,51 +1,33 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { TUser } from "@/types";
+import BlockUserModal from "../block-user-modal";
+import MakeAdminModal from "../make-admin-modal";
+import UnblockUserModal from "../unblock-user-modal";
 
-interface IProps {
-  name: string;
-  email: string;
-  role: string;
-  status: "Active" | "Blocked";
-}
+interface IProps extends TUser {}
 
-const UserRow: React.FC<IProps> = ({ name, email, role, status }) => {
+const UserRow: React.FC<IProps> = ({ name, email, role, status, _id }) => {
   return (
     <TableRow>
       <TableCell>{name}</TableCell>
       <TableCell>{email}</TableCell>
       <TableCell>{role}</TableCell>
       <TableCell>
-        {status === "Active" ? (
+        {status === "active" ? (
           <Badge variant="secondary">{status}</Badge>
         ) : (
           <Badge variant="destructive">{status}</Badge>
         )}
       </TableCell>
       <TableCell>
-        {status === "Blocked" ? (
-          <Button size="sm" variant="outline">
-            Unblock
-          </Button>
+        {status === "blocked" ? (
+          <UnblockUserModal role={role} id={_id} />
         ) : (
-          <Button size="sm" variant="outline">
-            Block
-          </Button>
+          <BlockUserModal role={role} id={_id} />
         )}
-        {role === "Admin" ? (
-          <Button size="sm" variant="outline" className="ml-2">
-            Remove Admin
-          </Button>
-        ) : (
-          <Button
-            disabled={status === "Blocked"}
-            size="sm"
-            variant="default"
-            className="ml-2"
-          >
-            Make Admin
-          </Button>
-        )}
+
+        <MakeAdminModal role={role} id={_id} status={status} />
       </TableCell>
     </TableRow>
   );

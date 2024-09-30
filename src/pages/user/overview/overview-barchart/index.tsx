@@ -16,14 +16,6 @@ import {
 
 export const description = "A bar chart with custom labels for bookings";
 
-// Updated chart data for bookings
-const chartData = [
-  { bookingType: "Total", count: 320 },
-  { bookingType: "Pending", count: 85 },
-  { bookingType: "Completed", count: 200 },
-  { bookingType: "Canceled", count: 35 },
-];
-
 // Updated chart configuration for each booking type
 const chartConfig = {
   total: {
@@ -47,7 +39,26 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const OverviewBarChart: React.FC = () => {
+interface IProps {
+  total: number;
+  pending: number;
+  completed: number;
+  cancelled: number;
+}
+
+const OverviewBarChart: React.FC<IProps> = ({
+  total,
+  pending,
+  completed,
+  cancelled,
+}) => {
+  // Updated chart data for bookings
+  const chartData = [
+    { bookingType: "Total", count: total },
+    { bookingType: "Pending", count: pending },
+    { bookingType: "Completed", count: completed },
+    { bookingType: "Canceled", count: cancelled },
+  ];
   return (
     <Card>
       <CardContent className="pt-4">

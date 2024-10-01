@@ -173,7 +173,7 @@ const UpdateCarModal: React.FC<IProps> = ({ id, status }) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          disabled={status === "Unavailable"}
+          disabled={status === "unavailable"}
           variant="outline"
           size="icon"
           className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"

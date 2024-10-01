@@ -62,7 +62,9 @@ const PaymentsHistoryTable: React.FC<IProps> = () => {
                   </TableCell>
                   <TableCell>{payment.status}</TableCell>
                   <TableCell>
-                    {new Date(payment.paidAt).toLocaleString()}
+                    {payment.paidAt
+                      ? new Date(payment.paidAt).toLocaleString()
+                      : "N/A"}
                   </TableCell>
                   <TableCell>{payment.paymentMethod}</TableCell>
                 </TableRow>
@@ -94,7 +96,9 @@ const PaymentsHistoryTable: React.FC<IProps> = () => {
 
                 <div className="text-sm font-medium">Paid At</div>
                 <div className="text-sm">
-                  {new Date(payment.paidAt).toLocaleString()}
+                  {payment.paidAt
+                    ? new Date(payment.paidAt).toLocaleString()
+                    : "N/A"}
                 </div>
 
                 <div className="text-sm font-medium">Payment Method:</div>

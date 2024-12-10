@@ -31,13 +31,13 @@ const CarCard: React.FC<CarTableRowProps> = ({
           <div className="text-sm font-medium">Color:</div>
           <div className="text-sm">{color}</div>
           <div className="text-sm font-medium">Status:</div>
-          <div className="text-sm">{status}</div>
+          <div className="text-sm capitalize">{status}</div>
         </div>
         <div className="flex space-x-2 mt-4 justify-end">
           <DeleteCarModal status={status} id={_id} />
 
           <Button
-            disabled={status === "Unavailable"}
+            disabled={status === "unavailable"}
             variant="outline"
             size="icon"
             className="duration-200 transition-all hover:bg-primary hover:text-white rounded-full"

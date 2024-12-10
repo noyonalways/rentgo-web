@@ -95,11 +95,17 @@ const ConfirmationBooking: React.FC<IProps> = () => {
       }
     } catch (err) {
       const error = err as TError;
-      toast.error(error.data.message || "Something went wrong", {
-        id: tostId,
-        position: "top-right",
-        duration: 2000,
-      });
+      console.log(error);
+      toast.error(
+        error?.data?.errorMessages?.[0].message ||
+          error.data.message ||
+          "Something went wrong",
+        {
+          id: tostId,
+          position: "top-right",
+          duration: 2000,
+        }
+      );
     }
   };
 

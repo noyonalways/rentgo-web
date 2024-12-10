@@ -30,7 +30,28 @@ const BookingCard: React.FC<IProps> = ({
           <div className="text-sm font-medium">End Time:</div>
           <div className="text-sm">{endTime ? endTime : "N/A"}</div>
           <div className="text-sm font-medium">Status:</div>
-          <div className="text-sm">{status}</div>
+          <div className="text-sm">
+            {(status === "cancelled" && (
+              <div className="text-sm capitalize px-4 bg-red-400 inline-block rounded-full">
+                {status}
+              </div>
+            )) ||
+              (status === "pending" && (
+                <div className="text-sm capitalize px-4 bg-yellow-400 inline-block rounded-full">
+                  {status}
+                </div>
+              )) ||
+              (status === "approved" && (
+                <div className="text-sm capitalize px-4 bg-blue-400 inline-block rounded-full">
+                  {status}
+                </div>
+              )) ||
+              (status === "completed" && (
+                <div className="text-sm capitalize px-4 bg-green-400 inline-block rounded-full">
+                  {status}
+                </div>
+              ))}
+          </div>
         </div>
         <div className="flex space-x-2 mt-4 justify-end">
           <CancelBookingModal id={_id} status={status} />

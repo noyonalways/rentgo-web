@@ -3,6 +3,7 @@ import {
   TResponse,
   TSignInPayload,
   TSignUpPayload,
+  TSocialLoginPayload,
   TUpdateProfilePayload,
   TUser,
 } from "@/types";
@@ -25,6 +26,21 @@ const authApi = baseApi.injectEndpoints({
       query: (payload) => {
         return {
           url: "/auth/signin",
+          method: "POST",
+          body: payload,
+        };
+      },
+      invalidatesTags: ["currentUser"],
+    }),
+
+    // social login
+    socialLogin: builder.mutation<
+      TResponse<{ token: string }>,
+      TSocialLoginPayload
+    >({
+      query: (payload) => {
+        return {
+          url: "/auth/social-login",
           method: "POST",
           body: payload,
         };
@@ -60,6 +76,7 @@ const authApi = baseApi.injectEndpoints({
 export const {
   useSignupMutation,
   useSigninMutation,
+  useSocialLoginMutation,
   useGetMeQuery,
   useUpdateProfileMutation,
 } = authApi;

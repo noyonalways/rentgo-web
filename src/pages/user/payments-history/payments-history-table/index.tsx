@@ -60,7 +60,7 @@ const PaymentsHistoryTable: React.FC<IProps> = () => {
                   <TableCell>
                     {payment.amount} {payment.currency}
                   </TableCell>
-                  <TableCell>{payment.status}</TableCell>
+                  <TableCell className="capitalize">{payment.status}</TableCell>
                   <TableCell>
                     {payment.paidAt
                       ? new Date(payment.paidAt).toLocaleString()
@@ -92,7 +92,7 @@ const PaymentsHistoryTable: React.FC<IProps> = () => {
                 </div>
 
                 <div className="text-sm font-medium">Status:</div>
-                <div className="text-sm">{payment.status}</div>
+                <div className="text-sm capitalize">{payment.status}</div>
 
                 <div className="text-sm font-medium">Paid At</div>
                 <div className="text-sm">

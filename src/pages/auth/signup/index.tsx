@@ -1,3 +1,4 @@
+import { SocialLogin } from "@/components/auth";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,6 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useSignupMutation } from "@/redux/features/auth/authApi";
 import { signUpFormSchema } from "@/schemas";
@@ -116,7 +118,7 @@ const SignUp: React.FC<IProps> = () => {
           </h3>
           <h1 className="font-bold text-3xl">User Sign Up</h1>
         </div>
-        <div className="w-full lg:max-w-lg mx-auto">
+        <div className="w-full lg:max-w-lg mx-auto space-y-4">
           <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
               <div>
@@ -318,16 +320,21 @@ const SignUp: React.FC<IProps> = () => {
               <Button size={"lg"} type="submit" className="w-full">
                 Sign Up
               </Button>
-              <div className="flex justify-center space-x-1">
-                <span className="text-center text-sm">
-                  Already have an account?
-                </span>
-                <Link to="/signin" className="text-primary text-sm">
-                  Sign In
-                </Link>
-              </div>
             </form>
           </Form>
+
+          <SocialLogin />
+
+          <Separator />
+
+          <div className="flex justify-center space-x-1">
+            <span className="text-center text-sm">
+              Already have an account?
+            </span>
+            <Link to="/signin" className="text-primary text-sm">
+              Sign In
+            </Link>
+          </div>
         </div>
       </div>
     </section>

@@ -1,3 +1,4 @@
+import { SocialLogin } from "@/components/auth";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -7,6 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { useSigninMutation } from "@/redux/features/auth/authApi";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
@@ -73,7 +75,7 @@ const SignIn: React.FC<IProps> = () => {
           </h3>
           <h1 className="font-bold text-3xl">User Sign In</h1>
         </div>
-        <div className="w-full lg:max-w-lg mx-auto">
+        <div className="w-full lg:max-w-lg mx-auto space-y-4">
           <Form {...form}>
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
@@ -119,20 +121,24 @@ const SignIn: React.FC<IProps> = () => {
                   </FormItem>
                 )}
               />
-
               <Button size={"lg"} type="submit" className="w-full">
                 Sign In
               </Button>
-              <div className="flex justify-center space-x-1">
-                <span className="text-center text-sm">
-                  Don&apos;t have an account?
-                </span>
-                <Link to="/signup" className="text-primary text-sm">
-                  Sign Up
-                </Link>
-              </div>
             </form>
           </Form>
+
+          <SocialLogin />
+
+          <Separator />
+
+          <div className="flex justify-center space-x-1">
+            <span className="text-center text-sm">
+              Don&apos;t have an account?
+            </span>
+            <Link to="/signup" className="text-primary text-sm">
+              Sign Up
+            </Link>
+          </div>
         </div>
       </div>
     </section>

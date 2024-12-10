@@ -179,7 +179,7 @@ const Cars: React.FC<IProps> = () => {
       <div className="container">
         <div className="flex flex-col lg:flex-row lg:-mt-[114px] pb-20 lg:space-x-6">
           {/* left side controls */}
-          <div className="lg:basis-[35%] my-6 lg:my-0">
+          <div className="lg:basis-[25%] my-6 lg:my-0">
             <div className="p-8 bg-primary rounded-t-xl">
               <Form {...form}>
                 <form
@@ -353,7 +353,7 @@ const Cars: React.FC<IProps> = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 lg:grid-cols-2 mt-6 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 mt-6 gap-6">
                   {cars?.map((car) => (
                     <CarCard key={car._id} {...car} />
                   ))}

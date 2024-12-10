@@ -20,7 +20,7 @@ const PaymentRow: React.FC<BookingRowProps> = ({ booking, onPay }) => {
       <TableCell>৳{booking.car.pricePerHour}</TableCell>
       <TableCell>{booking.totalHours} hrs</TableCell>
       <TableCell>৳{booking.totalCost}</TableCell>
-      <TableCell>
+      <TableCell className="capitalize">
         <Badge variant="outline">{booking.status}</Badge>
       </TableCell>
       <TableCell className="space-x-2">

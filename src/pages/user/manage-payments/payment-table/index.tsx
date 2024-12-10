@@ -55,6 +55,8 @@ const PaymentTable: React.FC = () => {
           position: "top-right",
         });
 
+        console.log(response);
+
         // Redirect to payment URL if present
         if (response.data?.result) {
           window.location.href = response.data.payment_url;

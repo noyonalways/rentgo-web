@@ -11,13 +11,13 @@ export interface TCar {
   color: string;
   seatCapacity: number;
   mileage: number;
-  mileageUnit: string;
+  mileageUnit: TMileageUnit;
   isElectric: boolean;
   galleryImages: GalleryImage[];
   features: string[];
   pricePerHour: number;
-  transmission: string;
-  status: string;
+  transmission: TTransmission;
+  status: TCarStatus;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -27,3 +27,9 @@ export interface GalleryImage {
   url: string;
   _id: string;
 }
+
+export type TCarStatus = "available" | "unavailable";
+
+export type TMileageUnit = "miles" | "kilometers";
+
+export type TTransmission = "automatic" | "manual";

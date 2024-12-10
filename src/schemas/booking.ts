@@ -7,18 +7,26 @@ export const createBookingSchema = z.object({
   email: z.string({
     required_error: "Email is required",
   }),
-  phone: z.string({
-    required_error: "Phone is required",
-  }),
-  bookingAddress: z.string({
-    required_error: "Booking Address is required",
-  }),
-  nidOrPassport: z.string({
-    required_error: "NID/Passport is required",
-  }),
-  drivingLicense: z.string({
-    required_error: "Driving License is required",
-  }),
+  phone: z
+    .string({
+      required_error: "Phone is required",
+    })
+    .min(1, "Phone is required"),
+  bookingAddress: z
+    .string({
+      required_error: "Booking Address is required",
+    })
+    .min(1, "Booking is required"),
+  nidOrPassport: z
+    .string({
+      required_error: "NID/Passport is required",
+    })
+    .min(1, "NID/Passport is required"),
+  drivingLicense: z
+    .string({
+      required_error: "Driving License is required",
+    })
+    .min(1, "Driving License is required"),
   startTime: z.string({
     required_error: "Please Select Start Time",
   }),

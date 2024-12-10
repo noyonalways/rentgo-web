@@ -31,7 +31,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
             {booking.endTime ? booking.endTime : "N/A"}
           </div>
           <div className="text-sm font-medium">Status:</div>
-          <div className="text-sm">{booking.status}</div>
+          <div className="text-sm capitalize">{booking.status}</div>
         </div>
         <div className="flex space-x-2 mt-4 justify-end">
           <CancelBookingModal onCancel={onCancel} status={booking.status} />

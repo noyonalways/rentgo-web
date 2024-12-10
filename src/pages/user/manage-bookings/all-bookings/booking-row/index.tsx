@@ -15,7 +15,7 @@ const BookingRow: React.FC<BookingTableRowProps> = ({ booking, onCancel }) => {
       <TableCell>{new Date(booking.bookingDate).toDateString()}</TableCell>
       <TableCell>{booking.startTime}</TableCell>
       <TableCell>{booking.endTime ? booking.endTime : "N/A"}</TableCell>
-      <TableCell>{booking.status}</TableCell>
+      <TableCell className="capitalize">{booking.status}</TableCell>
       <TableCell>
         <div className="flex space-x-2">
           <CancelBookingModal onCancel={onCancel} status={booking.status} />

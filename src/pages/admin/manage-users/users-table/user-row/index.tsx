@@ -12,8 +12,8 @@ const UserRow: React.FC<IProps> = ({ name, email, role, status, _id }) => {
     <TableRow>
       <TableCell>{name}</TableCell>
       <TableCell>{email}</TableCell>
-      <TableCell>{role}</TableCell>
-      <TableCell>
+      <TableCell className="capitalize">{role}</TableCell>
+      <TableCell className="capitalize">
         {status === "active" ? (
           <Badge variant="secondary">{status}</Badge>
         ) : (

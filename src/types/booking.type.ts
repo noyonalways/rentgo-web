@@ -1,6 +1,8 @@
 import { TCar } from "./car.type";
 import { TUser } from "./user.type";
 
+export type TBookingStatus = "pending" | "approved" | "cancelled" | "completed";
+
 export interface TBooking {
   _id: string;
   bookingDate: string;
@@ -12,7 +14,7 @@ export interface TBooking {
   bookingAddress: string;
   nidOrPassport: string;
   drivingLicense: string;
-  status: string;
+  status: TBookingStatus;
   phon: string;
   paymentStatus: string;
   totalHours: number;

@@ -21,7 +21,7 @@ const CarRow: React.FC<CarTableRowProps> = ({
       <TableCell>{year}</TableCell>
       <TableCell>{pricePerHour}</TableCell>
       <TableCell>{color}</TableCell>
-      <TableCell>{status}</TableCell>
+      <TableCell className="capitalize">{status}</TableCell>
       <TableCell>
         <div className="flex space-x-2">
           <DeleteCarModal status={status} id={_id} />

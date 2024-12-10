@@ -13,6 +13,13 @@ export type TSignInPayload = {
   password: string;
 };
 
+export type TSocialLoginPayload = {
+  name: string;
+  email: string;
+  phone?: string;
+  profilePicture?: string;
+};
+
 export interface TUpdateProfilePayload {
   name?: string;
   nidOrPassport?: string;

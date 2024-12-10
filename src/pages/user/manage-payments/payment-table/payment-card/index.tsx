@@ -35,7 +35,7 @@ const PaymentCard: React.FC<BookingCardProps> = ({
           <div className="text-sm font-medium">Total Cost:</div>
           <div className="text-sm">৳{booking.totalCost}</div>
           <div className="text-sm font-medium">Status:</div>
-          <div className="text-sm">{booking.status}</div>
+          <div className="text-sm capitalize">{booking.status}</div>
         </div>
         <div className="space-x-2 justify-end flex">
           <Link to={"/"}>
